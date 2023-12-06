@@ -2,11 +2,6 @@ package com.gbetododc;
 
 import java.util.concurrent.TimeUnit;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -14,6 +9,7 @@ import net.dv8tion.jda.api.entities.Activity;
 public class App {
     public static void main( String[] args ) {
         DiscordBot.main();
+        MSGraph.main();
     }
 
 
