@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.entities.Activity;
 public class App {
     public static void main( String[] args ) {
         DiscordBot.main();
-        MSGraph.main();
+        // MSGraph.main();
     }
 
 
