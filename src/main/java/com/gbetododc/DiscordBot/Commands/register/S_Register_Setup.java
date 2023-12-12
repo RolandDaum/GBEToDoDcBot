@@ -17,13 +17,13 @@ public class S_Register_Setup {
             "MA1", "MA2", "PH1", "CH1", "BI1", "BI2",
             "DE1", "DE2", "DE3","ENG1", "ENG2", "ENG3","LA1","FR1",
             "EK1", "PW1", "PW2","GE1", "GE2",
-            "KU1", "KU2",
+            "KU1", "KU2"
         };
-        String[] GKNaturwissenschaften = {"ma1", "ma2", "ma3", "ma4", "ph1", "bi1", "bi2", "if1", "if2", "ch1",};
-        String[] GKSprache = {"de1", "de2", "eng1", "eng2", "snn1", "la1", "fr1",};
-        String[] GKGesellschaft = {"pw1", "pw2", "ge1", "ge2", "re1", "re2", "rk1", "wn1",};
-        String[] GKKünstlerisch = {"mu1", "ku1", "ds1",};
-        String[] GKSport = {"sp1", "sp2", "sp3", "sp4", "spp1",};
+        String[] GKNaturwissenschaften = {"ma1", "ma2", "ma3", "ma4", "ph1", "bi1", "bi2", "if1", "if2", "ch1"};
+        String[] GKSprache = {"de1", "de2", "eng1", "eng2", "snn1", "la1", "fr1"};
+        String[] GKGesellschaft = {"pw1", "pw2", "ge1", "ge2", "re1", "re2", "rk1", "wn1"};
+        String[] GKKünstlerisch = {"mu1", "ku1", "ds1"};
+        String[] GKSport = {"sp1", "sp2", "sp3", "sp4", "spp1"};
         String[] SF = {"sf1", "sf2", "sf3", "sf4", "sf5", "sf6"};
 
         List<OptionData> optionDataList = new ArrayList<>();

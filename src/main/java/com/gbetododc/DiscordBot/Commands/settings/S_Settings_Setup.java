@@ -11,16 +11,15 @@ public class S_Settings_Setup {
 
 
     public static void setup(JDA jda) {
-        Guild guild = jda.getGuildById(dotenv.get("GUILDID"));
-
-        guild
+        
+        jda.getGuildById(dotenv.get("GUILDID"))
             .upsertCommand("settings", "adjust the some settings")
-            .addOptions(
-                (OptionType.BOOLEAN, "test", "Test description", true)
-                    .addChoice("Option 1", true)
-                    .addChoice("Option 2", false)
-        )
-            .addOption(null, null, null)
+                .addOption(OptionType.STRING, "rolename", "add role")
+                    .addChoice("Choice1", "Wert1")
+                    .addChoice("Choice2", "Wert2")
+                .addOption(OptionType.INTEGER, "test_int", "test int desc", "Test Integer")
+                    .addChoice("Choice3", 42)
+                    .addChoice("Choice4", 99)
             .queue();
     }
 }

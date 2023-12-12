@@ -2,8 +2,9 @@ package com.gbetododc.DiscordBot;
 
 
 import com.gbetododc.DiscordBot.Commands.BotCommandEventListener;
+import com.gbetododc.DiscordBot.Commands.admin.S_Admin;
+import com.gbetododc.DiscordBot.Commands.admin.S_Admin_Setup;
 import com.gbetododc.DiscordBot.Commands.register.S_Register_Setup;
-import com.gbetododc.DiscordBot.Commands.settings.S_Settings_Setup;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -26,6 +27,7 @@ public class DiscordBot extends ListenerAdapter {
         jda.getGuildById(dotenv.get("GUILDID")).updateCommands().queue(); // Deleting all Guild Commands on startup
         S_Register_Setup.setup(jda);
         // S_Settings_Setup.setup(jda);
+        S_Admin_Setup.setup(jda);
 
     }
 }
