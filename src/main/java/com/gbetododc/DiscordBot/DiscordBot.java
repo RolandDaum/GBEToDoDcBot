@@ -2,7 +2,6 @@ package com.gbetododc.DiscordBot;
 
 
 import com.gbetododc.DiscordBot.Commands.BotCommandEventListener;
-import com.gbetododc.DiscordBot.Commands.admin.S_Admin;
 import com.gbetododc.DiscordBot.Commands.admin.S_Admin_Setup;
 import com.gbetododc.DiscordBot.Commands.register.S_Register_Setup;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -25,6 +24,7 @@ public class DiscordBot extends ListenerAdapter {
 
         // Setup of the /Commands
         jda.getGuildById(dotenv.get("GUILDID")).updateCommands().queue(); // Deleting all Guild Commands on startup
+        // TODO - Die ganzen Setup dinger in eine Neue public functin in Bot Command Eventlistener machen und dann diese Date zu Commands.setup einfach umbenenen
         S_Register_Setup.setup(jda);
         // S_Settings_Setup.setup(jda);
         S_Admin_Setup.setup(jda);
