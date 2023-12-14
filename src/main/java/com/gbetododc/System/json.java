@@ -72,7 +72,7 @@ public class json {
 
             fileWriter.write(jsonString);
 
-            System.out.println("Wrote data successfully to: " + filePath);
+            System.out.println(ConsoleColors.GREEN + "JSON.java  |   " + ConsoleColors.RESET + "Wrote data successfully to: " + filePath);
 
         } catch (IOException e) {
             e.printStackTrace();

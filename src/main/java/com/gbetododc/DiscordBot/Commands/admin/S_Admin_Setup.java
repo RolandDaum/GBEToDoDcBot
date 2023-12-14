@@ -23,24 +23,35 @@ public class S_Admin_Setup {
                 new SubcommandGroupData("roles", "manage roles")
                     .addSubcommands(
                         new SubcommandData("add", "add a role")
-                            .addOption(OptionType.STRING, "rolename", "enter role name"),
+                            .addOption(OptionType.STRING, "rolename", "enter role name", true)
+                            .addOptions(new OptionData(OptionType.STRING, "coursetype", "optional - enter a coursetype if the role is a course")
+                                                .addChoice("LK", "LK")
+                                                .addChoice("GKNaturwissenschaften", "GKNaturwissenschaften")
+                                                .addChoice("GKSprache", "GKSprache")
+                                                .addChoice("GKGesellschaft", "GKGesellschaft")  
+                                                .addChoice("GKKünstlerisch", "GKKünstlerisch")
+                                                .addChoice("GKSport", "GKSport")
+                                                .addChoice("SF", "SF")
+                            )
+                            .addOption(OptionType.INTEGER, "rolecolor", "optional - enter role color as int like 0x255255255"),
+                            // .addOption(OptionType.STRING, "coursetype", "optional - enter a coursetype if the role is a course"),
     
                         new SubcommandData("remove", "a delete a role")
-                            .addOption(OptionType.ROLE, "delete", "comfirm"),
+                            .addOption(OptionType.ROLE, "delete", "comfirm", true),
     
                         new SubcommandData("removeall", "delete all roles")
-                            .addOption(OptionType.BOOLEAN, "delete", "comfirm"),
+                            .addOption(OptionType.BOOLEAN, "delete", "comfirm", true),
     
                         new SubcommandData("removeallcourses", "delete all courses")
-                            .addOption(OptionType.BOOLEAN, "delete", "comfirm")
+                            .addOption(OptionType.BOOLEAN, "delete", "comfirm", true)
                     ),
 
                 new SubcommandGroupData("bot", "manage bot")
                     .addSubcommands(
                         new SubcommandData("token", "manage the token")
-                            .addOption(OptionType.STRING, "change", "change the bot token"),
-                        new SubcommandData("severid", "manage the server ID")
-                            .addOption(OptionType.INTEGER, "change", "change the server ID used by the bot")
+                            .addOption(OptionType.STRING, "change", "change the bot token", true),
+                        new SubcommandData("changeseverid", "change the server ID")
+                            .addOption(OptionType.INTEGER, "change", "change the server ID used by the bot", true)
                     ),  
 
                 new SubcommandGroupData("msapi","manage msapi")
