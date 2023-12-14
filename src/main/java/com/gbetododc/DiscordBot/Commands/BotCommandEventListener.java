@@ -13,14 +13,15 @@ public class BotCommandEventListener extends ListenerAdapter {
     
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
-        if(event.getName().equals("register")){
-            S_Register.main(event);
-        }
-        // else if(event.getName().equals("settings")){
-        //     S_Settings.main(event);
-        // }
-        else if (event.getName().equals("admin")){
-            S_Admin.main(event);
+        switch (event.getName()) {
+            case "register":
+                S_Register.main(event);
+
+            // case "settings":
+            //     S_Settings.main(event);
+            
+            case "admin":
+                S_Admin.main(event);
         }
     }
 
