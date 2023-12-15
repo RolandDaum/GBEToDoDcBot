@@ -3,6 +3,9 @@ package com.gbetododc.DiscordBot.Commands.register;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gbetododc.System.Logger;
+import com.gbetododc.System.Logger.LogLvl;
+
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -39,7 +42,11 @@ public class S_Register_Setup {
         jda.getGuildById(dotenv.get("GUILDID"))
             .upsertCommand("register", "regsiter your courses")
             .addOptions(optionDataList)
-            .queue();
+            .queue(
+                sucess -> {
+                    Logger.log("S_Register_Setup - Setup", "Successfully added /register command", LogLvl.normale);
+                }
+            );
     }
 
     private static OptionData createOptionData(String name, String description, String[] choicelist, Boolean required) {

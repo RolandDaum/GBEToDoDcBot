@@ -1,9 +1,6 @@
 package com.gbetododc.DiscordBot.Commands.register;
 
-import java.util.List;
 import io.github.cdimascio.dotenv.Dotenv;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 
 public class S_Register {

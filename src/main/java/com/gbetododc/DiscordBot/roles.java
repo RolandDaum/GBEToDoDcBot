@@ -1,45 +1,69 @@
 package com.gbetododc.DiscordBot;
 
-import com.gbetododc.System.ConsoleColors;
-import com.gbetododc.System.json;
+import java.util.Map;
+
+import com.gbetododc.System.Json;
+import com.gbetododc.System.Logger;
+import com.gbetododc.System.Logger.LogLvl;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
 
-public class roles {
+public class Roles {
 
-    public static void deleteRole(Role role) {
+    public static void deleteRole(Role roleObj, String coursetype) {
         try {
-            role.delete().queue();
-            // TODO: Delete role from courses.json, if it is in the list
+            Map<String, Map<String, Long>> coursemap = Json.getcoursemap();
+            String rolename = roleObj.getName();
+
+            if (coursetype != null) {
+                if (Json.removeCourse(coursemap, rolename, roleObj.getIdLong(), coursetype)) {
+                    roleObj.delete()
+                        .queue(
+                            success -> {
+                                Logger.log("Roles - removeCourse", "Succefully removed courserole from courses.json and discord", LogLvl.normale);
+                            }
+                        );
+                } else {
+                    Logger.log("Roles - removeCourse", "Could not remove the courserole from courses.json. Nothing happend", LogLvl.moderate);
+                }
+            } else if (coursetype == null) {
+                roleObj.delete()
+                    .queue(
+                        success -> {
+                            Logger.log("Roles - deleteRole", "Successfully roleObj '" + rolename + "'", LogLvl.normale);
+                        }
+                    );
+            }
+
         } catch (Error error) {
             error.printStackTrace();
         }
     }
 
-    public static void createRole(Guild serverguild, String rolename, String kursart, Integer color) {
-
+    public static void createRole(Guild serverguild, String rolename, String coursetype, Integer color) {
         try {
-            if (kursart != null && !json.getcoursemap().get(kursart).containsKey(rolename)) {                 // save the role/kurs name and id in json file, when a kursart is provieded
-                System.out.println(ConsoleColors.GREEN + "ROLES.java |   " + ConsoleColors.RESET + "Provided Coursetype and courserolename which isn't existing in courses.json");
+            Map<String, Map<String, Long>> coursemap = Json.getcoursemap();
+            if (coursetype != null && !coursemap.get(coursetype).containsKey(rolename)) {
+                Logger.log("Roles - createRole", "Provided Coursetype and courserolename which isn't existing in courses.json", LogLvl.normale);
                 serverguild.createRole()
                     .setName(rolename)
                     .setColor(color) // 0x546e7a
                     .queue(
                         role -> {
-                            System.out.println(ConsoleColors.GREEN + "ROLES.java |   " + ConsoleColors.RESET + "Created a course Role: " + role.getName());
-                            json.addCourse(json.getcoursemap(), kursart, rolename, role.getGuild());
+                            Logger.log("Roles - createRole", "Created a course Role: " + role.getName(), LogLvl.normale);
+                            Json.addCourse(coursemap, coursetype, rolename, role.getIdLong());
                         }
                     );
-            } else if (kursart != null && json.getcoursemap().get(kursart).containsKey(rolename)) {
-                System.out.println(ConsoleColors.YELLOW + "ROLES.java |   " + ConsoleColors.RESET + "Role: " + rolename + " is allready in coursetype: " + kursart + " nothing has been done.");
+            } else if (coursetype != null && coursemap.get(coursetype).containsKey(rolename)) {
+                Logger.log("Roles - createRole", "'" + rolename + "' is already in coursetype '" + coursetype + "'", LogLvl.moderate);
                 return;
-            } else if (kursart == null) {                                                               // just create a roll without saving its name and id in json
+            } else if (coursetype == null) {
                 serverguild.createRole()
                     .setName(rolename)
                     .setColor(color)
                     .queue(
                         role -> {
-                            System.out.println(ConsoleColors.GREEN + "ROLES.java |   " + ConsoleColors.RESET + "Created a normale Role: " + role.getName());
+                            Logger.log("Roles - createRole", "Created a normal role: " + role.getName(), LogLvl.normale);
                         }
                     );
             }

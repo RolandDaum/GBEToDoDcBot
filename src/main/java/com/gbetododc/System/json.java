@@ -3,40 +3,27 @@ package com.gbetododc.System;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.io.FileWriter;
 import java.io.IOException;
-
-import com.gbetododc.DiscordBot.roles;
+import com.gbetododc.System.Logger.LogLvl;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
+import com.google.gson.reflect.TypeToken;
 import io.github.cdimascio.dotenv.Dotenv;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.events.Event;
 
-public class json {
+public class Json {
 
     static Dotenv dotenv = Dotenv.configure().load();
     static String GUILDID = dotenv.get("GUILDID");
     static String jsonFilePath = "C:\\Users\\daumr\\Desktop\\gbetododc\\src\\main\\java\\com\\gbetododc\\DiscordBot\\courses.json";
 
-
     public static Map<String, Map<String, Long>> getcoursemap() {
-
         try {
             String jsonData = new String(Files.readAllBytes(Paths.get(jsonFilePath)));
-
             Gson gson = new Gson();
+            Map<String, Map<String, Long>> coursesejson = gson.fromJson(jsonData, new TypeToken<Map<String, Map<String, Long>>>() {}.getType() );
 
-            Map<String, Map<String, Long>> coursesejson = gson.fromJson(jsonData, Map.class);
-
-            // System.out.println(coursesejson.get("LK").containsKey("MA1"));
-            // System.out.println(coursesejson.get("LK").get("MA1"));
-            // coursesejson.get("LK").remove("MA1");
-            // System.out.println(coursesejson);
-            // saveToJsonFile(coursesejson, jsonFilePath);
-
+            Logger.log("Json - getcoursemap","Returning coursemap",LogLvl.normale);
             return coursesejson;
 
         } catch (IOException error) {
@@ -45,38 +32,36 @@ public class json {
         }
     }
 
-    public static Map<String, Map<String, Long>> removeCourse(Event event, Map<String, Map<String, Long>> coursemap, String kursart, String  kursname) {
-        if (coursemap.containsKey(kursart) && coursemap.get(kursart).containsKey(kursname)) {
-            coursemap.get(kursart).remove(kursname);
-        }
-        return coursemap;
-    }
-    public static Map<String, Map<String, Long>> addCourse(Map<String, Map<String, Long>> coursemap, String kursart, String newkursname, Guild kursroleguild) {
+    public static void addCourse(Map<String, Map<String, Long>> coursemap, String coursetype, String newkursname, Long roleID) {
 
-        if (!coursemap.get(kursart).containsKey(newkursname)) {
-
-            coursemap.get(kursart).put(newkursname, kursroleguild.getIdLong()); // class to create roles 
+        if (!coursemap.get(coursetype).containsKey(newkursname)) {
+            coursemap.get(coursetype).put(newkursname, roleID);
             saveToJsonFile(coursemap, jsonFilePath);
+            Logger.log("Json - addCourse", "Successfully added course to coursemap", LogLvl.normale);
         }
 
-        return coursemap;
-
+    }
+    public static Boolean removeCourse(Map<String, Map<String, Long>> coursemap, String  coursename, Long courseid, String coursetype) {
+        if (coursemap.get(coursetype).containsKey(coursename) && coursemap.get(coursetype).get(coursename).longValue() == courseid) {
+            coursemap.get(coursetype).remove(coursename);
+            saveToJsonFile(coursemap, jsonFilePath);
+            Logger.log("Json - removeCourse", "Successfully removed course from coursemap", LogLvl.normale);
+            return true;
+        } else {
+            Logger.log("Json - removeCourse", "The provided course '" + coursename + "' could not be found under coursetype '" + coursetype + "' or the courseroleID doesn't match", LogLvl.moderate);
+            return false;
+        }
     }
 
     private static void saveToJsonFile(Map<String, Map<String, Long>> coursemap, String filePath) {
         try (FileWriter fileWriter = new FileWriter(filePath)) {
-
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
             String jsonString = gson.toJson(coursemap);
-
             fileWriter.write(jsonString);
 
-            System.out.println(ConsoleColors.GREEN + "JSON.java  |   " + ConsoleColors.RESET + "Wrote data successfully to: " + filePath);
-
+            Logger.log("Json - saveToJsonFile", "Successfully saved course map to " + filePath, LogLvl.normale);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 }

@@ -1,10 +1,11 @@
 package com.gbetododc.DiscordBot.Commands.admin;
 
+import com.gbetododc.System.Logger;
+import com.gbetododc.System.Logger.LogLvl;
+
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.MessageType;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.Command.Subcommand;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandGroupData;
@@ -37,7 +38,16 @@ public class S_Admin_Setup {
                             // .addOption(OptionType.STRING, "coursetype", "optional - enter a coursetype if the role is a course"),
     
                         new SubcommandData("remove", "a delete a role")
-                            .addOption(OptionType.ROLE, "delete", "comfirm", true),
+                            .addOption(OptionType.ROLE, "delete", "comfirm", true)
+                            .addOptions(new OptionData(OptionType.STRING, "coursetype", "optional but necessary for courses - enter coursetype to remove it from courses.json")
+                                .addChoice("LK", "LK")
+                                .addChoice("GKNaturwissenschaften", "GKNaturwissenschaften")
+                                .addChoice("GKSprache", "GKSprache")
+                                .addChoice("GKGesellschaft", "GKGesellschaft")  
+                                .addChoice("GKKünstlerisch", "GKKünstlerisch")
+                                .addChoice("GKSport", "GKSport")
+                                .addChoice("SF", "SF")
+                            ),
     
                         new SubcommandData("removeall", "delete all roles")
                             .addOption(OptionType.BOOLEAN, "delete", "comfirm", true),
@@ -81,7 +91,11 @@ public class S_Admin_Setup {
                 //         .addChoice("subjects - (For development purpose only)", "remsubj")
                 //         .addChoice("specific - ()", "remsubj")
                 // )
-            .queue();
+            .queue(
+                sucess -> {
+                    Logger.log("S_Admin_Setup - Setup", "Successfully added /admin command", LogLvl.normale);
+                }
+            );
         
     }
 
