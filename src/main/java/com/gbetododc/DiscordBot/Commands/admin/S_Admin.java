@@ -1,20 +1,16 @@
 package com.gbetododc.DiscordBot.Commands.admin;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import javax.management.relation.Role;
-import javax.management.relation.RoleList;
-
 import com.gbetododc.DiscordBot.Roles;
 import com.gbetododc.System.Json;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
 import io.github.cdimascio.dotenv.Dotenv;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
 
 public class S_Admin {
     
@@ -27,6 +23,16 @@ public class S_Admin {
 
             case "roles":
                 switch (event.getSubcommandName()) {
+                    case "list":
+                        switch (event.getOption("roletypes").getAsString()) {
+                            case "all":
+                                event.reply("listing all roles").queue();
+                                break;
+                            case "courses":
+                                event.reply("listing all courseroles").queue();
+                                break;
+                        }
+                        break;
                     case "add":
                         Logger.log("S_Admin - roles add", "Started rollcreation process", LogLvl.normale);
                         Roles.createRole(

@@ -23,6 +23,13 @@ public class S_Admin_Setup {
 
                 new SubcommandGroupData("roles", "manage roles")
                     .addSubcommands(
+                        new SubcommandData("list", "list all roles")
+                            .addOptions(
+                                new OptionData(OptionType.STRING, "roletypes", "types of roles to be listed", true)
+                                    .addChoice("all", "all")
+                                    .addChoice("courses", "courses")
+                            ),
+                            
                         new SubcommandData("add", "add a role")
                             .addOption(OptionType.STRING, "rolename", "enter role name", true)
                             .addOptions(new OptionData(OptionType.STRING, "coursetype", "optional - enter a coursetype if the role is a course")
