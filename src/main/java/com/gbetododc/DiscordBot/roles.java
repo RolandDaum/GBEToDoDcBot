@@ -1,5 +1,6 @@
 package com.gbetododc.DiscordBot;
 
+import java.util.Iterator;
 import java.util.Map;
 
 import com.gbetododc.System.Json;
@@ -11,33 +12,38 @@ import net.dv8tion.jda.api.entities.Role;
 public class Roles {
 
     public static void deleteRole(Role roleObj, String coursetype) {
-        try {
-            Map<String, Map<String, Long>> coursemap = Json.getcoursemap();
-            String rolename = roleObj.getName();
+        if (roleObj.getIdLong() == 1173317439761678339L || roleObj.getIdLong() == 1173303775407116288L) {
+            Logger.log("Roles - deleteRole", "Cant delete the role from the Bot or @everyone", LogLvl.moderate);
+        } else {
+            try {
+                Map<String, Map<String, Long>> coursemap = Json.getcoursemap();
+                String rolename = roleObj.getName();
 
-            if (coursetype != null) {
-                if (Json.removeCourse(coursemap, rolename, roleObj.getIdLong(), coursetype)) {
+                if (coursetype != null) {
+                    if (Json.removeCourse(coursemap, rolename, roleObj.getIdLong(), coursetype)) {
+                        roleObj.delete()
+                            .queue(
+                                success -> {
+                                    Logger.log("Roles - removeCourse", "Succefully removed courserole from courses.json and discord", LogLvl.normale);
+                                }
+                            );
+                    } else {
+                        Logger.log("Roles - removeCourse", "Could not remove the courserole from courses.json. Nothing happend", LogLvl.moderate);
+                    }
+                } else if (coursetype == null) {
                     roleObj.delete()
                         .queue(
                             success -> {
-                                Logger.log("Roles - removeCourse", "Succefully removed courserole from courses.json and discord", LogLvl.normale);
+                                Logger.log("Roles - deleteRole", "Successfully roleObj '" + rolename + "'", LogLvl.normale);
                             }
                         );
-                } else {
-                    Logger.log("Roles - removeCourse", "Could not remove the courserole from courses.json. Nothing happend", LogLvl.moderate);
                 }
-            } else if (coursetype == null) {
-                roleObj.delete()
-                    .queue(
-                        success -> {
-                            Logger.log("Roles - deleteRole", "Successfully roleObj '" + rolename + "'", LogLvl.normale);
-                        }
-                    );
-            }
 
-        } catch (Error error) {
-            error.printStackTrace();
+            } catch (Error error) {
+                Logger.log("Roles - deleteRole", error.toString(), LogLvl.moderate);
+            }
         }
+        
     }
 
     public static void createRole(Guild serverguild, String rolename, String coursetype, Integer color) {
@@ -68,7 +74,7 @@ public class Roles {
                     );
             }
         } catch (Error error) {
-            error.printStackTrace();
+            Logger.log("S_Admin - roles createRole", error.toString(), LogLvl.moderate);
         }
     }
     

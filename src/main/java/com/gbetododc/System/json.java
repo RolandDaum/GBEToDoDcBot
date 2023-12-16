@@ -2,6 +2,7 @@ package com.gbetododc.System;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Iterator;
 import java.util.Map;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -23,7 +24,7 @@ public class Json {
             Gson gson = new Gson();
             Map<String, Map<String, Long>> coursesejson = gson.fromJson(jsonData, new TypeToken<Map<String, Map<String, Long>>>() {}.getType() );
 
-            Logger.log("Json - getcoursemap","Returning coursemap",LogLvl.normale);
+            Logger.log("Json - getcoursemap","Returning requested coursemap",LogLvl.normale);
             return coursesejson;
 
         } catch (IOException error) {
@@ -51,6 +52,22 @@ public class Json {
             Logger.log("Json - removeCourse", "The provided course '" + coursename + "' could not be found under coursetype '" + coursetype + "' or the courseroleID doesn't match", LogLvl.moderate);
             return false;
         }
+    }
+
+    public static void clearCourseList() {
+        Map<String, Map<String, Long>> coursemap = Json.getcoursemap();
+
+        for (Map.Entry<String, Map<String, Long>> entry : coursemap.entrySet()) {
+            Map<String, Long> innerMap = entry.getValue();
+
+            Iterator<Map.Entry<String, Long>> iterator = innerMap.entrySet().iterator();
+            while (iterator.hasNext()) {
+                iterator.next();
+                iterator.remove();
+            }
+        }
+        Logger.log("Json - clearCourseList", "Removed all courseroles from courselist", LogLvl.normale);
+        saveToJsonFile(coursemap, jsonFilePath);
     }
 
     private static void saveToJsonFile(Map<String, Map<String, Long>> coursemap, String filePath) {

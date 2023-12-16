@@ -37,7 +37,7 @@ public class BotCommand extends ListenerAdapter {
         // Setup of the /Commands
         jda.getGuildById(dotenv.get("GUILDID")).updateCommands().queue(
             success -> {
-                Logger.log("BotCommand - Setup", "Successfully reset all commands", LogLvl.normale);
+                Logger.log("BotCommand - commandSetup", "Successfully reset all commands", LogLvl.normale);
             }
         ); // Deleting all Guild Commands on startup
 

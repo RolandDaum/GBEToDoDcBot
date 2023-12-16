@@ -35,8 +35,7 @@ public class S_Admin_Setup {
                                                 .addChoice("SF", "SF")
                             )
                             .addOption(OptionType.INTEGER, "rolecolor", "optional - enter role color as int like 0x255255255"),
-                            // .addOption(OptionType.STRING, "coursetype", "optional - enter a coursetype if the role is a course"),
-    
+
                         new SubcommandData("remove", "a delete a role")
                             .addOption(OptionType.ROLE, "delete", "comfirm", true)
                             .addOptions(new OptionData(OptionType.STRING, "coursetype", "optional but necessary for courses - enter coursetype to remove it from courses.json")
@@ -50,10 +49,10 @@ public class S_Admin_Setup {
                             ),
     
                         new SubcommandData("removeall", "delete all roles")
-                            .addOption(OptionType.BOOLEAN, "delete", "comfirm", true),
+                            .addOption(OptionType.BOOLEAN, "confirme", "confirme to delete all roles", true),
     
                         new SubcommandData("removeallcourses", "delete all courses")
-                            .addOption(OptionType.BOOLEAN, "delete", "comfirm", true)
+                            .addOption(OptionType.BOOLEAN, "confirme", "confirme to delete all courseroles", true)
                     ),
 
                 new SubcommandGroupData("bot", "manage bot")
