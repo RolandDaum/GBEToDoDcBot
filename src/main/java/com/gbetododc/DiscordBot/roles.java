@@ -1,8 +1,6 @@
 package com.gbetododc.DiscordBot;
 
-import java.util.Iterator;
 import java.util.Map;
-
 import com.gbetododc.System.Json;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;

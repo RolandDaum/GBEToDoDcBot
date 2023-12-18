@@ -8,7 +8,6 @@ import com.gbetododc.DiscordBot.Commands.register.S_Register_Setup;
 import com.gbetododc.DiscordBot.Commands.settings.S_Settings_Setup;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
-
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -21,11 +20,7 @@ public class BotCommand extends ListenerAdapter {
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
         switch (event.getName()) {
             case "register":
-                S_Register.main(event);
-
-            // case "settings":
-            //     S_Settings.main(event);
-            
+                S_Register.main(event);            
             case "admin":
                 S_Admin.main(event);
         }
@@ -33,7 +28,7 @@ public class BotCommand extends ListenerAdapter {
 
 
     public static void commandSetup(JDA jda) {
-        Logger.log("BotCommand Setup", "Started the BodCommand slash setupt process", LogLvl.normale);
+        Logger.log("BotCommand - Setup", "Started the BodCommand slash setupt process", LogLvl.normale);
         // Setup of the /Commands
         jda.getGuildById(dotenv.get("GUILDID")).updateCommands().queue(
             success -> {

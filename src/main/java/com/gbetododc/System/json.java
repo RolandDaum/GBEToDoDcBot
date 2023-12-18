@@ -24,9 +24,7 @@ public class Json {
             Gson gson = new Gson();
             Map<String, Map<String, Long>> coursesejson = gson.fromJson(jsonData, new TypeToken<Map<String, Map<String, Long>>>() {}.getType() );
 
-            Logger.log("Json - getcoursemap","Returning requested coursemap",LogLvl.normale);
             return coursesejson;
-
         } catch (IOException error) {
             error.printStackTrace();
             return null;
@@ -38,7 +36,7 @@ public class Json {
         if (!coursemap.get(coursetype).containsKey(newkursname)) {
             coursemap.get(coursetype).put(newkursname, roleID);
             saveToJsonFile(coursemap, jsonFilePath);
-            Logger.log("Json - addCourse", "Successfully added course to coursemap", LogLvl.normale);
+            Logger.log("Json - addCourse", "Successfully added " + newkursname + " to coursemap under coursetype " + coursetype, LogLvl.normale);
         }
 
     }
@@ -46,7 +44,7 @@ public class Json {
         if (coursemap.get(coursetype).containsKey(coursename) && coursemap.get(coursetype).get(coursename).longValue() == courseid) {
             coursemap.get(coursetype).remove(coursename);
             saveToJsonFile(coursemap, jsonFilePath);
-            Logger.log("Json - removeCourse", "Successfully removed course from coursemap", LogLvl.normale);
+            Logger.log("Json - removeCourse", "Successfully removed " + coursename + " from coursemap under coursetype " + coursetype, LogLvl.normale);
             return true;
         } else {
             Logger.log("Json - removeCourse", "The provided course '" + coursename + "' could not be found under coursetype '" + coursetype + "' or the courseroleID doesn't match", LogLvl.moderate);
@@ -66,7 +64,7 @@ public class Json {
                 iterator.remove();
             }
         }
-        Logger.log("Json - clearCourseList", "Removed all courseroles from courselist", LogLvl.normale);
+        Logger.log("Json - clearCourseList", "Removed all courseroles from courselist", LogLvl.moderate);
         saveToJsonFile(coursemap, jsonFilePath);
     }
 
@@ -77,8 +75,8 @@ public class Json {
             fileWriter.write(jsonString);
 
             Logger.log("Json - saveToJsonFile", "Successfully saved course map to " + filePath, LogLvl.normale);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException error) {
+            Logger.log("Json - saveToJsonFile", error.toString(), LogLvl.moderate);
         }
     }
 }

@@ -20,7 +20,6 @@ public class S_Admin_Setup {
             .upsertCommand("admin", "admin settings")
 
             .addSubcommandGroups(
-
                 new SubcommandGroupData("roles", "manage roles")
                     .addSubcommands(
                         new SubcommandData("list", "list all roles")
@@ -44,7 +43,7 @@ public class S_Admin_Setup {
                             .addOption(OptionType.INTEGER, "rolecolor", "optional - enter role color as int like 0x255255255"),
 
                         new SubcommandData("remove", "a delete a role")
-                            .addOption(OptionType.ROLE, "delete", "comfirm", true)
+                            .addOption(OptionType.ROLE, "deleterole", "comfirm", true)
                             .addOptions(new OptionData(OptionType.STRING, "coursetype", "optional but necessary for courses - enter coursetype to remove it from courses.json")
                                 .addChoice("LK", "LK")
                                 .addChoice("GKNaturwissenschaften", "GKNaturwissenschaften")
@@ -67,7 +66,9 @@ public class S_Admin_Setup {
                         new SubcommandData("token", "manage the token")
                             .addOption(OptionType.STRING, "change", "change the bot token", true),
                         new SubcommandData("changeseverid", "change the server ID")
-                            .addOption(OptionType.INTEGER, "change", "change the server ID used by the bot", true)
+                            .addOption(OptionType.INTEGER, "change", "change the server ID used by the bot", true),
+                        new SubcommandData("shutdown", "shutdown the bot")
+                            .addOption(OptionType.BOOLEAN, "confirme", "shutdown the bot")
                     ),  
 
                 new SubcommandGroupData("msapi","manage msapi")
