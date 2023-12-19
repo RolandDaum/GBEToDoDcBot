@@ -145,7 +145,7 @@ public class S_Admin {
         Logger.log("S_Admin - roles add", event.getUser().getName() + " executed /admin roles add rolename:" + rolename + " coursetype:" + courseroletype, LogLvl.Title);
 
         Map<String, Map<String, Long>> coursemap = Json.getcoursemap();
-        Role roleOnserverifExisting = event.getJDA().getGuildById(DiscordBot.GUILDID).getRolesByName(rolename, true).stream().findFirst().orElse(null);
+        Role roleOnserverifExisting = event.getGuild().getRolesByName(rolename, true).stream().findFirst().orElse(null);
         Boolean roleisInCourseMap = false;
         for (Map.Entry<String, Map<String, Long>> entry : coursemap.entrySet()) {
             Map<String, Long> coursesMap = entry.getValue();
@@ -160,7 +160,7 @@ public class S_Admin {
         
         if (!roleisInCourseMap && roleOnserverifExisting == null) {
             if (courseroletype != null) {
-                event.getJDA().getGuildById(DiscordBot.GUILDID).createRole()
+                event.getGuild().createRole()
                     .setName(rolename)
                     .setColor(rolecolor)
                     .queue(
@@ -184,7 +184,7 @@ public class S_Admin {
                 event.reply("Creating role '" + rolename + "' under the category '" + courseroletype + "' with the color '" + rolecolor + "'").queue();
             } else if (courseroletype == null) {
                 if (roleOnserverifExisting == null) {
-                    event.getJDA().getGuildById(DiscordBot.GUILDID).createRole()
+                    event.getGuild().createRole()
                         .setName(rolename)
                         .setColor(rolecolor)
                         .queue(
@@ -275,12 +275,12 @@ public class S_Admin {
     private static void roles_removeall(SlashCommandInteractionEvent event) {
         MessageChannelUnion eventChannel = event.getChannel();
         User eventUser = event.getUser();
-        Boolean eventOption = event.getOption("confirme").getAsBoolean()
+        Boolean eventOption = event.getOption("confirme").getAsBoolean();
 
         Logger.log("S_Admin - roles removeall", eventUser.getAsMention() + " executed /admin roles removall confirme:" + eventOption, LogLvl.Title);
         
         if (eventOption) {
-            List<net.dv8tion.jda.api.entities.Role> allServerRoles = event.getJDA().getGuildById(DiscordBot.GUILDID).getRoles();
+            List<net.dv8tion.jda.api.entities.Role> allServerRoles = event.getGuild().getRoles();
             for (net.dv8tion.jda.api.entities.Role role : allServerRoles) {
                 String rolename = role.getName();
                 if (role.getIdLong() != 1173317439761678339L) { // When it is not he Bot ID
@@ -288,7 +288,7 @@ public class S_Admin {
                         role.delete().queue(
                             success -> {
                                 Logger.log("S_Admin - roles removeall", "Successfully deleted Role: " + rolename, LogLvl.normale);
-                                if (event.getJDA().getGuildById(DiscordBot.GUILDID).getRoles().size() <= 2) {
+                                if (event.getGuild().getRoles().size() <= 2) {
                                     Json.clearCourseList();
                                     Logger.log("S_Admin - roles removeall", "Successfully removed ALL roles. Hope it wasn't a mistake.", LogLvl.critical);
                                     eventChannel.sendMessage(":white_check_mark:   " + eventUser.getAsMention() + " removed all roles, hope it wasn't a mistake").queue();
@@ -329,7 +329,7 @@ public class S_Admin {
             for (Map.Entry<String, Map<String, Long>> entry : coursemap.entrySet()) {
                 Map<String, Long> CoursesMap = entry.getValue();
                 for (Map.Entry<String, Long> entry2 : CoursesMap.entrySet()) {
-                    event.getJDA().getGuildById(DiscordBot.GUILDID)
+                    event.getGuild()
                         .getRoleById(
                             entry2.getValue()
                         )
