@@ -42,17 +42,8 @@ public class S_Admin_Setup {
                             )
                             .addOption(OptionType.INTEGER, "rolecolor", "optional - enter role color as int like 0x255255255"),
 
-                        new SubcommandData("remove", "a delete a role")
-                            .addOption(OptionType.ROLE, "deleterole", "comfirm", true)
-                            .addOptions(new OptionData(OptionType.STRING, "coursetype", "optional but necessary for courses - enter coursetype to remove it from courses.json")
-                                .addChoice("LK", "LK")
-                                .addChoice("GKNaturwissenschaften", "GKNaturwissenschaften")
-                                .addChoice("GKSprache", "GKSprache")
-                                .addChoice("GKGesellschaft", "GKGesellschaft")  
-                                .addChoice("GKKünstlerisch", "GKKünstlerisch")
-                                .addChoice("GKSport", "GKSport")
-                                .addChoice("SF", "SF")
-                            ),
+                        new SubcommandData("remove", "a delete a role (courses will automaticlly be removed from .json file)")
+                            .addOption(OptionType.ROLE, "deleterole", "comfirm", true),
     
                         new SubcommandData("removeall", "delete all roles")
                             .addOption(OptionType.BOOLEAN, "confirme", "confirme to delete all roles", true),

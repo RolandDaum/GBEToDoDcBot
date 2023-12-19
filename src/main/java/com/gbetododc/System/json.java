@@ -17,7 +17,7 @@ public class Json {
     static Dotenv dotenv = Dotenv.configure().load();
     static String GUILDID = dotenv.get("GUILDID");
     // TODO: realative Path
-    static String jsonFilePath = "C:\\Users\\daumr\\Desktop\\GBEToDoDcBot\\src\\main\\java\\com\\gbetododc\\DiscordBot\\courses.json";
+    static String jsonFilePath = "C:\\Users\\daumr\\Desktop\\gbetododc\\src\\main\\java\\com\\gbetododc\\DiscordBot\\courses.json";
 
     public static Map<String, Map<String, Long>> getcoursemap() {
         try {
@@ -41,14 +41,15 @@ public class Json {
             return false;
         }
     }
+
     public static Boolean removeCourse(Map<String, Map<String, Long>> coursemap, String  coursename, Long courseid, String coursetype) {
         if (coursemap.get(coursetype).containsKey(coursename) && coursemap.get(coursetype).get(coursename).longValue() == courseid) {
             coursemap.get(coursetype).remove(coursename);
             saveToJsonFile(coursemap, jsonFilePath);
-            Logger.log("Json - removeCourse", "Successfully removed " + coursename + " from coursemap under coursetype " + coursetype, LogLvl.normale);
+            Logger.log("Json - removeCourse", "successfully removed " + coursename + " from coursemap under coursetype " + coursetype, LogLvl.normale);
             return true;
         } else {
-            Logger.log("Json - removeCourse", "The provided course '" + coursename + "' could not be found under coursetype '" + coursetype + "' or the courseroleID doesn't match", LogLvl.moderate);
+            Logger.log("Json - removeCourse", "the provided course '" + coursename + "' could not be found under coursetype '" + coursetype + "' or the courseroleID doesn't match", LogLvl.moderate);
             return false;
         }
     }
@@ -65,7 +66,7 @@ public class Json {
                 iterator.remove();
             }
         }
-        Logger.log("Json - clearCourseList", "Removed all courseroles from courselist", LogLvl.moderate);
+        Logger.log("Json - clearCourseList", "removed all courseroles from courselist", LogLvl.moderate);
         saveToJsonFile(coursemap, jsonFilePath);
     }
 
@@ -75,7 +76,7 @@ public class Json {
             String jsonString = gson.toJson(coursemap);
             fileWriter.write(jsonString);
 
-            Logger.log("Json - saveToJsonFile", "Saved coursemap to: " + filePath, LogLvl.normale);
+            Logger.log("Json - saveToJsonFile", "saved coursemap to: " + filePath, LogLvl.normale);
         } catch (Throwable error) {
             Logger.log("Json - saveToJsonFile", error.toString(), LogLvl.moderate);
         }

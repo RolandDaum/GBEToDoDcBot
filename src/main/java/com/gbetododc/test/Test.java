@@ -7,16 +7,18 @@ import com.gbetododc.System.Json;
 
 public class Test {
     public static void main(String[] args) {
-        Map<String, Map<String, Long>> coursemap = Json.getcoursemap();
+        System.out.println("String mit String direkt: " + ("MA1" == "MA1"));
 
-        for (Map.Entry<String, Map<String, Long>> entry : coursemap.entrySet()) {
+        String newString = new String("MA1");
+        String string = "MA1";
+        System.out.println("String mit newString: " + (newString == string));
 
-            Map<String, Long> CourseIDMap = entry.getValue();
-            
-            for (Map.Entry<String, Long> entry2 : CourseIDMap.entrySet()) {
-                System.out.println(entry2.getKey());
-                System.out.println(entry2.getValue());
-            }
-        }
+        String newString2 = new String("MA1");
+        String string2 = "MA1";
+        System.out.println("String mit newString.equals(): " + newString.equals(string));
+
+        String stringA = "MA1";
+        String stringB = "MA1";
+        System.out.println("String mit String via var: " + (stringA == stringB));
     }
 }
