@@ -3,6 +3,9 @@ package com.gbetododc.DiscordBot.Commands.admin;
 import java.util.List;
 import java.util.Map;
 
+import javax.security.auth.login.LoginException;
+import javax.swing.text.html.Option;
+
 import com.gbetododc.DiscordBot.DiscordBot;
 import com.gbetododc.DiscordBot.Roles;
 import com.gbetododc.System.Json;
@@ -10,7 +13,6 @@ import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.events.Event;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 
@@ -79,14 +81,60 @@ public class S_Admin {
         }
     }
     private static void roles_add(SlashCommandInteractionEvent event) {
-        Logger.log("S_Admin - roles add", event.getUser().getName() + " executed /admin roles add rolename:" + event.getOption("rolename", null, OptionMapping::getAsString) + " coursetype:" + event.getOption("coursetype", null, OptionMapping::getAsString) + " rolecolor:" + event.getOption("rolecolor", null, OptionMapping::getAsInt), LogLvl.Title);
-        Roles.createRole(
-            event.getJDA().getGuildById(GUILDID), 
-            event.getOption("rolename", null, OptionMapping::getAsString), 
-            event.getOption("coursetype", null, OptionMapping::getAsString), 
-            event.getOption("rolecolor", null, OptionMapping::getAsInt)         // Was machen, wenn null aka nicht eingegeben wurde?
-        );
-        event.reply("Finished rolecreation process successfull or not idk. I'm just a bot").queue();
+
+        String rolename = event.getOption("rolename", null, OptionMapping::getAsString);
+        String courseroletype = event.getOption("coursetype", null, OptionMapping::getAsString);
+        Integer rolecolor = event.getOption("rolecolor", null, OptionMapping::getAsInt);
+
+        if (courseroletype != null) {
+            Map<String, Map<String, Long>> coursemap = Json.getcoursemap();
+            System.out.println(coursemap);
+            Boolean roleIsinCourseMap = coursemap.get(courseroletype).containsKey(rolename);
+            System.out.println(roleIsinCourseMap);
+            if (!roleIsinCourseMap) {
+                try {
+                    event.getJDA().getGuildById(DiscordBot.GUILDID).createRole()
+                        .setName(rolename)
+                        .setColor(rolecolor)
+                        .queue(
+                            success -> {
+                                Logger.log("S_Admin - roles add", "created role: " + success.getName() + " on server", LogLvl.normale);
+
+                                Boolean addedCoursetoJson = Json.addCourse(coursemap, courseroletype, success.getName(), success.getIdLong());
+                                if (addedCoursetoJson) {
+                                    Logger.log("S_Admin - roles add", "added role: " + success.getName() + " as coursetype: " + courseroletype, LogLvl.normale);
+                                }
+                            }
+                        );
+                } catch (Throwable error) {
+                    Logger.log("S_Admin - roles add", error.toString(), LogLvl.moderate);
+                }
+
+            }
+
+        } else if (courseroletype == null) {
+            try {
+                event.getJDA().getGuildById(DiscordBot.GUILDID).createRole()
+                    .setName(rolename)
+                    .setColor(rolecolor)
+                    .queue(
+                        success -> {
+                            Logger.log("S_Admin - roles add", "created role: " + success.getName() + " on server", LogLvl.normale);
+                        }
+                    );                
+            } catch (Throwable error) {
+                Logger.log("S_Admin - roles add", error.toString(), LogLvl.moderate);
+            }
+        }
+
+        // Logger.log("S_Admin - roles add", event.getUser().getName() + " executed /admin roles add rolename:" + event.getOption("rolename", null, OptionMapping::getAsString) + " coursetype:" + event.getOption("coursetype", null, OptionMapping::getAsString) + " rolecolor:" + event.getOption("rolecolor", null, OptionMapping::getAsInt), LogLvl.Title);
+        // Roles.createRole(
+        //     event.getJDA().getGuildById(GUILDID), 
+        //     event.getOption("rolename", null, OptionMapping::getAsString), 
+        //     event.getOption("coursetype", null, OptionMapping::getAsString), 
+        //     event.getOption("rolecolor", null, OptionMapping::getAsInt)         // Was machen, wenn null aka nicht eingegeben wurde?
+        // );
+        // event.reply("Finished rolecreation process successfull or not idk. I'm just a bot").queue();
     }
     private static void roles_remove(SlashCommandInteractionEvent event) {
         String eventTrigger = event.getUser().getName();

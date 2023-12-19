@@ -16,7 +16,8 @@ public class Json {
 
     static Dotenv dotenv = Dotenv.configure().load();
     static String GUILDID = dotenv.get("GUILDID");
-    static String jsonFilePath = "C:\\Users\\daumr\\Desktop\\gbetododc\\src\\main\\java\\com\\gbetododc\\DiscordBot\\courses.json";
+    // TODO: realative Path
+    static String jsonFilePath = "C:\\Users\\daumr\\Desktop\\GBEToDoDcBot\\src\\main\\java\\com\\gbetododc\\DiscordBot\\courses.json";
 
     public static Map<String, Map<String, Long>> getcoursemap() {
         try {
@@ -31,14 +32,14 @@ public class Json {
         }
     }
 
-    public static void addCourse(Map<String, Map<String, Long>> coursemap, String coursetype, String newkursname, Long roleID) {
-
+    public static Boolean addCourse(Map<String, Map<String, Long>> coursemap, String coursetype, String newkursname, Long roleID) {
         if (!coursemap.get(coursetype).containsKey(newkursname)) {
             coursemap.get(coursetype).put(newkursname, roleID);
             saveToJsonFile(coursemap, jsonFilePath);
-            Logger.log("Json - addCourse", "Successfully added " + newkursname + " to coursemap under coursetype " + coursetype, LogLvl.normale);
+            return true;
+        } else {    
+            return false;
         }
-
     }
     public static Boolean removeCourse(Map<String, Map<String, Long>> coursemap, String  coursename, Long courseid, String coursetype) {
         if (coursemap.get(coursetype).containsKey(coursename) && coursemap.get(coursetype).get(coursename).longValue() == courseid) {
@@ -74,8 +75,8 @@ public class Json {
             String jsonString = gson.toJson(coursemap);
             fileWriter.write(jsonString);
 
-            Logger.log("Json - saveToJsonFile", "Successfully saved course map to " + filePath, LogLvl.normale);
-        } catch (IOException error) {
+            Logger.log("Json - saveToJsonFile", "Saved coursemap to: " + filePath, LogLvl.normale);
+        } catch (Throwable error) {
             Logger.log("Json - saveToJsonFile", error.toString(), LogLvl.moderate);
         }
     }
