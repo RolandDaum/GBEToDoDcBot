@@ -54,6 +54,8 @@ public class S_Admin_Setup {
 
                 new SubcommandGroupData("bot", "manage bot")
                     .addSubcommands(
+                        new SubcommandData("updatecommands", "update all the commands")
+                            .addOption(OptionType.BOOLEAN, "confirme", "confirme"),
                         new SubcommandData("token", "manage the token")
                             .addOption(OptionType.STRING, "change", "change the bot token", true),
                         new SubcommandData("changeseverid", "change the server ID")

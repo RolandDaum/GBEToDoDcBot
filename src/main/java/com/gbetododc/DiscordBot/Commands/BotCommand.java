@@ -1,6 +1,8 @@
 package com.gbetododc.DiscordBot.Commands;
 
 import org.jetbrains.annotations.NotNull;
+
+import com.gbetododc.DiscordBot.DiscordBot;
 import com.gbetododc.DiscordBot.Commands.admin.S_Admin;
 import com.gbetododc.DiscordBot.Commands.admin.S_Admin_Setup;
 import com.gbetododc.DiscordBot.Commands.register.S_Register;
@@ -27,16 +29,16 @@ public class BotCommand extends ListenerAdapter {
     }
 
 
-    public static void commandSetup(JDA jda) {
+    public static void commandSetup() {
+        JDA jda = DiscordBot.JDA;
         Logger.log("BotCommand - Setup", "Started the BodCommand slash setupt process", LogLvl.normale);
-        // Setup of the /Commands
+        
         jda.getGuildById(dotenv.get("GUILDID")).updateCommands().queue(
             success -> {
                 Logger.log("BotCommand - commandSetup", "Successfully reset all commands", LogLvl.normale);
             }
-        ); // Deleting all Guild Commands on startup
+        );
 
-        // TODO - Die ganzen Setup dinger in eine Neue public functin in Bot Command Eventlistener machen und dann diese Date zu Commands.setup einfach umbenenen
         S_Register_Setup.setup(jda);
         S_Settings_Setup.setup(jda);
         S_Admin_Setup.setup(jda);

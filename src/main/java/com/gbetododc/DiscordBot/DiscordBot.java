@@ -6,7 +6,6 @@ import com.gbetododc.System.Logger.LogLvl;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
@@ -35,6 +34,6 @@ public class DiscordBot extends ListenerAdapter {
         Logger.log("DiscordBot - build", "Connected the bot successfully", LogLvl.Title);
 
         // Setup the Command Layout
-        BotCommand.commandSetup(jda);
+        // BotCommand.commandSetup();
     }
 }

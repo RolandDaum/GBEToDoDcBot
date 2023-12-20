@@ -1,8 +1,7 @@
-package com.gbetododc.test;
+package com.gbetododc.Test;
 
 import java.util.Iterator;
 import java.util.Map;
-
 import com.gbetododc.System.Json;
 
 public class Test {
