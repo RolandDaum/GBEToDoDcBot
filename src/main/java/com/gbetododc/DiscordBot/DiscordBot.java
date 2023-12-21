@@ -1,5 +1,7 @@
 package com.gbetododc.DiscordBot;
 
+import java.io.File;
+
 import com.gbetododc.DiscordBot.Commands.BotCommand;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
@@ -17,6 +19,7 @@ public class DiscordBot extends ListenerAdapter {
 
     public static final String GUILDID = dotenv.get("GUILDID");
     public static JDA JDA;
+    public static String PROJPATH = System.getProperty("user.dir");
 
     public static void main(String[] args) throws InterruptedException {
         Logger.log("DiscordBot - starting", "Starting the bot", LogLvl.Title);

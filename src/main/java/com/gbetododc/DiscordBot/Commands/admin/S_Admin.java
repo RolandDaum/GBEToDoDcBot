@@ -200,7 +200,7 @@ public class S_Admin {
         String rolename = roleObj.getName();
         Long roleIDtodelete = roleObj.getIdLong();
         String coursetype = event.getOption("coursetype", null, OptionMapping::getAsString);
-        Map<String, Map<String, Long>> coursemap = Json.getcoursemap();
+        Map<String, Map<String, Long>> coursemap = json.getcoursemap();
 
         Logger.log("S_Admin - roles remove", event.getUser().getName() + " executed /admin roles remove rolename:" + rolename + " coursetype:" + coursetype, LogLvl.Title);
 
@@ -234,7 +234,7 @@ public class S_Admin {
                 );
                 event.reply("Queued the removal of '" + rolename + "'").queue();
             } else if (RoleisInCourseMap) {
-                Boolean removedCoursefromJson = Json.removeCourse(coursemap, rolename, roleIDtodelete, coursetype);
+                Boolean removedCoursefromJson = json.removeCourse(coursemap, rolename, roleIDtodelete, coursetype);
                 if (removedCoursefromJson) {
                     roleObj.delete().queue(
                         success -> {
@@ -270,7 +270,7 @@ public class S_Admin {
                             success -> {
                                 Logger.log("S_Admin - roles removeall", "Successfully deleted Role: " + rolename, LogLvl.normale);
                                 if (event.getGuild().getRoles().size() <= 2) {
-                                    Json.clearCourseList();
+                                    json.clearCourseList();
                                     Logger.log("S_Admin - roles removeall", "Successfully removed ALL roles. Hope it wasn't a mistake.", LogLvl.critical);
                                     eventChannel.sendMessage(":white_check_mark:   " + eventUser.getAsMention() + " removed all roles, hope it wasn't a mistake").queue();
                                 } else {
@@ -295,7 +295,7 @@ public class S_Admin {
         User eventUser = event.getUser();
         Boolean eventOption = event.getOption("confirme").getAsBoolean();
         MessageChannelUnion eventChannel = event.getChannel();
-        Map<String, Map<String, Long>> coursemap = Json.getcoursemap();
+        Map<String, Map<String, Long>> coursemap = json.getcoursemap();
 
         Logger.log("S_Admin - roles removeallcourses", eventUser.getAsMention() + " executed /admin roles removeallcourses confirme:" + event.getOption("confirme").getAsBoolean(), LogLvl.Title);
 
@@ -328,7 +328,7 @@ public class S_Admin {
                         );
                 }
             }
-            Json.clearCourseList();
+            json.clearCourseList();
             Logger.log("S_Admin - roles removeallcourses", "queued all courseroles to be removed", LogLvl.moderate);
             event.reply("Queued all courseroles to be removed").queue();
         } else if (!eventOption) {
