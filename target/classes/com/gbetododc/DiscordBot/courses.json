@@ -1,9 +1,26 @@
 {
-  "LK": {},
-  "GKNaturwissenschaften": {},
-  "GKSprache": {},
-  "GKGesellschaft": {},
-  "GKKünstlerisch": {},
-  "GKSport": {},
-  "SF": {}
+  "lk": {
+    "MA1": 1187451809044901920,
+    "PH1": 1187451810491945051,
+    "ENG1": 1187451811381129267
+  },
+  "gknaturwissenschaften": {
+    "if1": 1187451812933017791
+  },
+  "gksprache": {
+    "de2": 1187451813964824708
+  },
+  "gkgesellschaft": {
+    "pw2": 1187451815126638763,
+    "re1": 1187451816363970561
+  },
+  "gkkünstlerisch": {
+    "ds1": 1187451817764855851
+  },
+  "gksport": {
+    "sp4": 1187451819073478818
+  },
+  "sf": {
+    "sf5": 1187451820474380528
+  }
 }

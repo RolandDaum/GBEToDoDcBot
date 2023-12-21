@@ -3,6 +3,7 @@ package com.gbetododc.DiscordBot.Commands.register;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gbetododc.DiscordBot.DiscordBot;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
 
@@ -31,15 +32,15 @@ public class S_Register_Setup {
 
         List<OptionData> optionDataList = new ArrayList<>();
 
-        for (int i=1; i<4; i++) {   optionDataList.add(createOptionData("p"+i, "Wähle dein P"+i, LKurse, true));                                                   }
-        for (int i=1; i<6; i++) {   optionDataList.add(createOptionData("gk-naturwissenschaften-"+i, "Wähle einen Kurs aus dem naturwissenschaftlichen Bereich", GKNaturwissenschaften, false));  }
-        for (int i=1; i<6; i++) {   optionDataList.add(createOptionData("gk-sprache-"+i, "Wähle einen Kurs aus dem sprachlichen Bereich", GKSprache, false));                          }
-        for (int i=1; i<5; i++) {   optionDataList.add(createOptionData("gk-gesellschaft-"+i, "Wähle einen Kurs aus dem gesellschaftlichen Bereich", GKGesellschaft, false));                }
-        for (int i=1; i<4; i++) {   optionDataList.add(createOptionData("gk-künstlerisch-"+i, "Wähle einen Kurs aus dem künstlerischen Bereich", GKKünstlerisch, false));                }
-        optionDataList.add(createOptionData("gk-sport", "Wähle dein Sportkurs", GKSport, false));
-        optionDataList.add(createOptionData("seminarfach", "Wähle dein Seminarfach", SF, false));
+        for (int i=1; i<4; i++) {   optionDataList.add(createOptionData("lk-"+i, "Wähle dein P"+i, LKurse, true));                                                   }
+        for (int i=1; i<6; i++) {   optionDataList.add(createOptionData("gknaturwissenschaften-"+i, "Wähle einen Kurs aus dem naturwissenschaftlichen Bereich", GKNaturwissenschaften, false));  }
+        for (int i=1; i<6; i++) {   optionDataList.add(createOptionData("gksprache-"+i, "Wähle einen Kurs aus dem sprachlichen Bereich", GKSprache, false));                          }
+        for (int i=1; i<5; i++) {   optionDataList.add(createOptionData("gkgesellschaft-"+i, "Wähle einen Kurs aus dem gesellschaftlichen Bereich", GKGesellschaft, false));                }
+        for (int i=1; i<4; i++) {   optionDataList.add(createOptionData("gkkünstlerisch-"+i, "Wähle einen Kurs aus dem künstlerischen Bereich", GKKünstlerisch, false));                }
+        optionDataList.add(createOptionData("gksport", "Wähle dein Sportkurs", GKSport, false));
+        optionDataList.add(createOptionData("sf", "Wähle dein Seminarfach", SF, false));
 
-        jda.getGuildById(dotenv.get("GUILDID"))
+        DiscordBot.JDA
             .upsertCommand("register", "regsiter your courses")
             .addOptions(optionDataList)
             .queue(
