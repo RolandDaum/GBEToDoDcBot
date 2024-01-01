@@ -3,12 +3,7 @@ package com.gbetododc.System;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
-import javax.management.relation.Role;
-
 import com.gbetododc.DiscordBot.DiscordBot;
-
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Member;
 
 public class Logger {
@@ -38,12 +33,12 @@ public class Logger {
 
             case normale:
                 System.out.println(ConsoleColors.BLACK + "[" + dateTime + "] " + ConsoleColors.GREEN + "[" + logtitle + "] " + ConsoleColors.WHITE + logmessage);
-                try {
-                    DiscordBot.JDA.getGuildById(DiscordBot.GUILDID)
-                        .getTextChannelById(consolelogChannelID)
-                        .sendMessage("```ansi\n[0;2m[0;2m[0;2m[0;2m[0;2m[" + dateTime + "] [0;32m[" + logtitle + "][0m " + logmessage + "\n```")
-                        .queue();
-                    } catch (Throwable e) {}     
+                // try {
+                //     DiscordBot.JDA.getGuildById(DiscordBot.GUILDID)
+                //         .getTextChannelById(consolelogChannelID)
+                //         .sendMessage("```ansi\n[0;2m[0;2m[0;2m[0;2m[0;2m[" + dateTime + "] [0;32m[" + logtitle + "][0m " + logmessage + "\n```")
+                //         .queue();
+                //     } catch (Throwable e) {}     
                 break;
 
             case moderate:
