@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.io.FileWriter;
 import java.io.IOException;
-
 import com.gbetododc.DiscordBot.DiscordBot;
 import com.gbetododc.System.Logger.LogLvl;
 import com.google.gson.Gson;

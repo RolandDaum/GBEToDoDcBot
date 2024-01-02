@@ -1,20 +1,13 @@
 package com.gbetododc.Test;
 
-import java.io.File;
-import java.nio.file.Paths;
-import java.util.Iterator;
-import java.util.Map;
-import com.gbetododc.System.Json;
+import java.util.List;
 
-public class Test {
+import com.google.gson.Gson;
 
-    public static void main(String[] args) {
-        System.out.println((System.getProperty("user.dir") + "\\src\\main\\java\\com\\gbetododc\\DiscordBot\\courses.json"));
+import kong.unirest.Unirest;
 
-        // String filePath = new File("").getAbsolutePath();
-        // System.out.println(filePath);
-    }
-
+public class Test {    
+  
     public static void stingEqul() {
         System.out.println("String mit String direkt: " + ("MA1" == "MA1"));
 
