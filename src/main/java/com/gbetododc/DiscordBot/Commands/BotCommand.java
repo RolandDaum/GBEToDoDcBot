@@ -9,14 +9,11 @@ import com.gbetododc.DiscordBot.Commands.register.S_Register_Setup;
 import com.gbetododc.DiscordBot.Commands.settings.S_Settings_Setup;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
-import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class BotCommand extends ListenerAdapter {
-    static Dotenv dotenv = Dotenv.configure().load();
-
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
         switch (event.getName()) {
@@ -35,7 +32,7 @@ public class BotCommand extends ListenerAdapter {
         JDA jda = DiscordBot.JDA;
         Logger.log("BotCommand - Setup", "Started the BodCommand slash setupt process", LogLvl.normale);
         
-        jda.getGuildById(dotenv.get("GUILDID")).updateCommands().queue(
+        jda.updateCommands().queue(
             success -> {
                 Logger.log("BotCommand - commandSetup", "Successfully reset all commands", LogLvl.normale);
             }

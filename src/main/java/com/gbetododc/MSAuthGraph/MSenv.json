@@ -1,0 +1,16 @@
+{
+    "values": {
+        "Token": "",
+        "RFToken": "",
+        "ExpiryDate": ""
+    },
+    "ReqCredentials": {
+        "scopes": "Tasks.ReadWrite offline_access",
+        "client_id": "7b3c0a44-153b-4676-a508-a22699ff49d0",
+        "redirect_URI": "http://localhost:8000/register",
+        "url_auth": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+        "url_token": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+        "url_graph": "https://graph.microsoft.com/v1.0/me/",
+        "ToDoListID": ""
+    }
+}

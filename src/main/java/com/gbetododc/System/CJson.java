@@ -13,11 +13,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import io.github.cdimascio.dotenv.Dotenv;
 
-public class Json {
+public class CJson {
 
     static Dotenv dotenv = Dotenv.configure().load();
     static String GUILDID = dotenv.get("GUILDID");
-    // TODO: realative Path
     
     static String jsonFilePath = DiscordBot.PROJPATH + "\\src\\main\\java\\com\\gbetododc\\DiscordBot\\courses.json";
 
@@ -57,7 +56,7 @@ public class Json {
     }
 
     public static void clearCourseList() {
-        Map<String, Map<String, Long>> coursemap = Json.getcoursemap();
+        Map<String, Map<String, Long>> coursemap = CJson.getcoursemap();
 
         for (Map.Entry<String, Map<String, Long>> entry : coursemap.entrySet()) {
             Map<String, Long> innerMap = entry.getValue();

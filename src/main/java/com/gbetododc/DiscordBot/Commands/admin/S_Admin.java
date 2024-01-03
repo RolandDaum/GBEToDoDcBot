@@ -1,17 +1,14 @@
 package com.gbetododc.DiscordBot.Commands.admin;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import com.gbetododc.DiscordBot.DiscordBot;
 import com.gbetododc.DiscordBot.Commands.register.S_Register_Setup;
 import com.gbetododc.DiscordBot.Commands.settings.S_Settings_Setup;
-import com.gbetododc.System.Json;
+import com.gbetododc.System.CJson;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
-
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Role;
@@ -99,7 +96,7 @@ public class S_Admin {
         ).queue();
     }
     private static void role_list_courses(SlashCommandInteractionEvent event) {
-        Map<String, Map<String, Long>> coursemap = Json.getcoursemap();
+        Map<String, Map<String, Long>> coursemap = CJson.getcoursemap();
         String roleNames = "";
         for (Map.Entry<String, Map<String, Long>> entry : coursemap.entrySet()) {
             Map<String, Long> CoursesMap = entry.getValue();
@@ -125,7 +122,7 @@ public class S_Admin {
 
         Logger.log("S_Admin - roles add", event.getUser().getName() + " executed /admin roles add rolename:" + rolename + " coursetype:" + courseroletype, LogLvl.Title);
 
-        Map<String, Map<String, Long>> coursemap = Json.getcoursemap();
+        Map<String, Map<String, Long>> coursemap = CJson.getcoursemap();
         Role roleOnserverifExisting = event.getGuild().getRolesByName(rolename, true).stream().findFirst().orElse(null);
         Boolean roleisInCourseMap = false;
         for (Map.Entry<String, Map<String, Long>> entry : coursemap.entrySet()) {
@@ -147,7 +144,7 @@ public class S_Admin {
                     .queue(
                         success -> {
                             Logger.log("S_Admin - roles add", "created role: " + success.getName() + " on server", LogLvl.normale);
-                            Boolean addedCoursetoJson = Json.addCourse(coursemap, courseroletype, success.getName(), success.getIdLong());
+                            Boolean addedCoursetoJson = CJson.addCourse(coursemap, courseroletype, success.getName(), success.getIdLong());
                             if (addedCoursetoJson) {
                                 Logger.log("S_Admin - roles add", "added courserole '" + success.getName() + "' as coursetype '" + courseroletype + "' with the color '" + rolecolor + "'", LogLvl.normale);
                                 eventChannel.sendMessage(":white_check_mark:   " + eventUser.getAsMention() + " created " + success.getAsMention()).queue();
@@ -179,9 +176,6 @@ public class S_Admin {
                             }
                         ); 
                     event.reply("Creating role '" + rolename + "' with the color '" + rolecolor + "'").queue();
-                } else if (roleOnserverifExisting != null) {
-                    Logger.log("S_Admin - roles add", "role '" + rolename + "' already exitst on server", LogLvl.moderate);
-                    event.reply(":x:   " + roleOnserverifExisting.getAsMention() + " already exist on server").queue();
                 }
             }
         } else if (roleisInCourseMap || roleOnserverifExisting != null) {
@@ -200,7 +194,7 @@ public class S_Admin {
         String rolename = roleObj.getName();
         Long roleIDtodelete = roleObj.getIdLong();
         String coursetype = event.getOption("coursetype", null, OptionMapping::getAsString);
-        Map<String, Map<String, Long>> coursemap = Json.getcoursemap();
+        Map<String, Map<String, Long>> coursemap = CJson.getcoursemap();
 
         Logger.log("S_Admin - roles remove", event.getUser().getName() + " executed /admin roles remove rolename:" + rolename + " coursetype:" + coursetype, LogLvl.Title);
 
@@ -234,7 +228,7 @@ public class S_Admin {
                 );
                 event.reply("Queued the removal of '" + rolename + "'").queue();
             } else if (RoleisInCourseMap) {
-                Boolean removedCoursefromJson = Json.removeCourse(coursemap, rolename, roleIDtodelete, coursetype);
+                Boolean removedCoursefromJson = CJson.removeCourse(coursemap, rolename, roleIDtodelete, coursetype);
                 if (removedCoursefromJson) {
                     roleObj.delete().queue(
                         success -> {
@@ -258,7 +252,7 @@ public class S_Admin {
         User eventUser = event.getUser();
         Boolean eventOption = event.getOption("confirme").getAsBoolean();
 
-        Logger.log("S_Admin - roles removeall", eventUser.getAsMention() + " executed /admin roles removall confirme:" + eventOption, LogLvl.Title);
+        Logger.log("S_Admin - roles removeall", eventUser.getName() + " executed /admin roles removall confirme:" + eventOption, LogLvl.Title);
         
         if (eventOption) {
             List<net.dv8tion.jda.api.entities.Role> allServerRoles = event.getGuild().getRoles();
@@ -270,7 +264,7 @@ public class S_Admin {
                             success -> {
                                 Logger.log("S_Admin - roles removeall", "Successfully deleted Role: " + rolename, LogLvl.normale);
                                 if (event.getGuild().getRoles().size() <= 2) {
-                                    Json.clearCourseList();
+                                    CJson.clearCourseList();
                                     Logger.log("S_Admin - roles removeall", "Successfully removed ALL roles. Hope it wasn't a mistake.", LogLvl.critical);
                                     eventChannel.sendMessage(":white_check_mark:   " + eventUser.getAsMention() + " removed all roles, hope it wasn't a mistake").queue();
                                 } else {
@@ -284,10 +278,10 @@ public class S_Admin {
                     }
                 }
             }
-            Logger.log("S_Admin - removeall", "Queued all roles to be removed", LogLvl.normale);
+            Logger.log("S_Admin - removeall", "Queued all roles to be removed", LogLvl.moderate);
             event.reply("Queued all roles to be removed").queue();
         } else if (!eventOption) {
-            Logger.log("S_Admin - roles removeall", event.getUser().getName() + " tried to remove all roles, but denied it.", LogLvl.normale);
+            Logger.log("S_Admin - roles removeall", event.getUser().getName() + " tried to remove all roles, but denied it.", LogLvl.moderate);
             event.reply(":x:   You did not agree to remove all roles. Try again and select 'True' under confirm").queue();
         }
     }
@@ -295,7 +289,7 @@ public class S_Admin {
         User eventUser = event.getUser();
         Boolean eventOption = event.getOption("confirme").getAsBoolean();
         MessageChannelUnion eventChannel = event.getChannel();
-        Map<String, Map<String, Long>> coursemap = Json.getcoursemap();
+        Map<String, Map<String, Long>> coursemap = CJson.getcoursemap();
 
         Logger.log("S_Admin - roles removeallcourses", eventUser.getAsMention() + " executed /admin roles removeallcourses confirme:" + event.getOption("confirme").getAsBoolean(), LogLvl.Title);
 
@@ -328,7 +322,7 @@ public class S_Admin {
                         );
                 }
             }
-            Json.clearCourseList();
+            CJson.clearCourseList();
             Logger.log("S_Admin - roles removeallcourses", "queued all courseroles to be removed", LogLvl.moderate);
             event.reply("Queued all courseroles to be removed").queue();
         } else if (!eventOption) {

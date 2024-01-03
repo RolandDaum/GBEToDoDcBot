@@ -1,11 +1,11 @@
-package com.gbetododc.MSAuth;
+package com.gbetododc.MSAuthGraph;
 
 import java.util.List;
 import com.google.gson.Gson;
 import kong.unirest.Unirest;
 
-public class MsAuth {
-        public static void main(String[] args) {
+public class MsGraph {
+    public static void main(String[] args) {
         Unirest.get("https://graph.microsoft.com/v1.0/me/todo/lists")
             .header(
                 "Authorization",
@@ -16,7 +16,7 @@ public class MsAuth {
                     System.out.println("ERROR " + response.getStatus() + ": " + response.getStatusText());
                 } else {
                     Gson gson = new Gson();
-
+                
                     // JSON-String in ein Java-Objekt umwandeln
                     TodoListResponse todoListResponse = gson.fromJson(response.getBody().toString(), TodoListResponse.class);
                     
@@ -34,19 +34,19 @@ public class MsAuth {
                 }
                 System.exit(0);
             });
-        
-        // Unirest.post("https://login.microsoftonline.com/common/oauth2/v2.0/token")
-        //     .field("client_id", "7b3c0a44-153b-4676-a508-a22699ff49d0")
-        //     .field("scope","Tasks.ReadWrite offline_access")
-        //     .field("redirect_uri", "http://localhost:8000/register")
-        //     .field("grant_type", "refresh_token")
-        //     .field("client_secret", "RHW8Q~Et0D6P0xLFiP7F0HdmXymBCmrgPMS2VdeB")
-        //     .field("refresh_token", "M.C105_SN1.-Con8ctbztcY*7ZgU14I97LROBgMYtxIyk!3p*FodpvdkwAT!WaiJ1vFcDiAdsWjcJY5D9Glio!pODDDgxy9SRNdqBSBcSsE9bTEor6kcWLNpQ75Pt6RJn0!8VVQlLIz9KY1GkZlJ5IhCrVB*3nt!BkCzkj5d9CXwmvjH9Flz1HIrIOIuxS3Kdp!m7MMru*A1QCQZrEICkCO8HPl5tZdwwFUpi*FsQGvrux9l5EQ2mY4gCBhpELcjAaXoLtIkkwHIG!LDOMYciQGG6loRX1QhTM*HhomCl8KkPmcn4h09M*9IwcJuxzy6g!nCkJ!HO*7IiA$$")
-        //     .asJsonAsync(
-        //         response -> {
-        //             System.out.println(response.getBody());
-        //         }
-        //     );
+    
+    // Unirest.post("https://login.microsoftonline.com/common/oauth2/v2.0/token")
+    //     .field("client_id", "7b3c0a44-153b-4676-a508-a22699ff49d0")
+    //     .field("scope","Tasks.ReadWrite offline_access")
+    //     .field("redirect_uri", "http://localhost:8000/register")
+    //     .field("grant_type", "refresh_token")
+    //     .field("client_secret", "RHW8Q~Et0D6P0xLFiP7F0HdmXymBCmrgPMS2VdeB")
+    //     .field("refresh_token", "M.C105_SN1.-Con8ctbztcY*7ZgU14I97LROBgMYtxIyk!3p*FodpvdkwAT!WaiJ1vFcDiAdsWjcJY5D9Glio!pODDDgxy9SRNdqBSBcSsE9bTEor6kcWLNpQ75Pt6RJn0!8VVQlLIz9KY1GkZlJ5IhCrVB*3nt!BkCzkj5d9CXwmvjH9Flz1HIrIOIuxS3Kdp!m7MMru*A1QCQZrEICkCO8HPl5tZdwwFUpi*FsQGvrux9l5EQ2mY4gCBhpELcjAaXoLtIkkwHIG!LDOMYciQGG6loRX1QhTM*HhomCl8KkPmcn4h09M*9IwcJuxzy6g!nCkJ!HO*7IiA$$")
+    //     .asJsonAsync(
+    //         response -> {
+    //             System.out.println(response.getBody());
+    //         }
+    //     );
     }
 
     public class TodoListResponse {
