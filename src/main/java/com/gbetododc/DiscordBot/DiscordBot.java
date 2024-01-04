@@ -36,7 +36,6 @@ public class DiscordBot extends ListenerAdapter {
         DiscordBot.MAIINSERVERGUILD = jda.getGuildById(dotenv.get("MAINSERVERGUILDID"));
         Logger.log("DiscordBot - build", "Connected the bot successfully", LogLvl.Title);
 
-        // Setup the Command Layout
-        // BotCommand.commandSetup();
+        
     }
 }

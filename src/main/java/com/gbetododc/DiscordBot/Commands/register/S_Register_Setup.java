@@ -9,6 +9,7 @@ import com.gbetododc.System.Logger.LogLvl;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
@@ -16,7 +17,7 @@ public class S_Register_Setup {
     
     static Dotenv dotenv = Dotenv.configure().load();
 
-    public static void setup(JDA jda) {
+    public static void setup() {
         String[] LKurse = {
             "MA1", "MA2", "PH1", "CH1", "BI1", "BI2",
             "DE1", "DE2", "DE3","ENG1", "ENG2", "ENG3","LA1","FR1",
@@ -40,8 +41,7 @@ public class S_Register_Setup {
         optionDataList.add(createOptionData("gksport", "Wähle dein Sportkurs", GKSport, false));
         optionDataList.add(createOptionData("sf", "Wähle dein Seminarfach", SF, false));
 
-        DiscordBot.JDA
-            .upsertCommand("register", "regsiter your courses")
+        DiscordBot.MAIINSERVERGUILD.upsertCommand("register", "regsiter your courses")
             .addOptions(optionDataList)
             .queue(
                 sucess -> {

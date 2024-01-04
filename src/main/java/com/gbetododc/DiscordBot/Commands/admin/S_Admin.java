@@ -1,21 +1,26 @@
 package com.gbetododc.DiscordBot.Commands.admin;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import com.gbetododc.DiscordBot.DiscordBot;
 import com.gbetododc.DiscordBot.Commands.register.S_Register_Setup;
 import com.gbetododc.DiscordBot.Commands.settings.S_Settings_Setup;
+import com.gbetododc.MSAuthGraph.MsAuth;
 import com.gbetododc.System.CJson;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.GuildWelcomeScreen.Channel;
 import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 public class S_Admin {
     public static void main(SlashCommandInteractionEvent event) {
@@ -63,6 +68,9 @@ public class S_Admin {
                         break;
                     case "clientsecret":
                         break;
+                    case "reauthorize":
+                        msapi_reauthorize(event);
+                        break;
                 }
                 break;
         }
@@ -76,14 +84,14 @@ public class S_Admin {
 
         switch (eventOption) {
             case "all":
-                role_list_all(event);
+                roles_list_all(event);
                 break;
             case "courses":
-                role_list_courses(event);     
+                roles_list_courses(event);     
                 break;
         }
     }
-    private static void role_list_all(SlashCommandInteractionEvent event) {
+    private static void roles_list_all(SlashCommandInteractionEvent event) {
         List<Role> roles = event.getGuild().getRoles();
         String roleNames = "";
         for (Role role : roles) {roleNames += "\n" + role.getAsMention();}
@@ -95,7 +103,7 @@ public class S_Admin {
                 .build()
         ).queue();
     }
-    private static void role_list_courses(SlashCommandInteractionEvent event) {
+    private static void roles_list_courses(SlashCommandInteractionEvent event) {
         Map<String, Map<String, Long>> coursemap = CJson.getcoursemap();
         String roleNames = "";
         for (Map.Entry<String, Map<String, Long>> entry : coursemap.entrySet()) {
@@ -112,7 +120,6 @@ public class S_Admin {
                 .build()
         ).queue();
     }
-
     private static void roles_add(SlashCommandInteractionEvent event) {
         String rolename = event.getOption("rolename", null, OptionMapping::getAsString);
         String courseroletype = event.getOption("coursetype", null, OptionMapping::getAsString);
@@ -333,7 +340,7 @@ public class S_Admin {
     }
 
     private static void bot_updatecommands(SlashCommandInteractionEvent event) {
-        JDA eventJDA = event.getJDA();
+        JDA jda = DiscordBot.JDA;
         User eventUser = event.getUser();
         Boolean eventOption = event.getOption("confirme").getAsBoolean();
         MessageChannelUnion eventChannel = event.getChannel();
@@ -341,19 +348,19 @@ public class S_Admin {
         Logger.log("S_Admin - bot updatecommands", eventUser.getName() + " executed '/admin bot updatecommands:" + eventOption, LogLvl.Title);
 
         if (eventOption) {
-            eventJDA.updateCommands().queue(
+            jda.updateCommands().queue(
             success -> {
-                S_Register_Setup.setup(eventJDA);
-                S_Settings_Setup.setup(eventJDA);
-                S_Admin_Setup.setup(eventJDA);
+                S_Register_Setup.setup();
+                S_Admin_Setup.setup();
                 Logger.log("S_Admin - bot updatecommands", "successfully updated all commands", LogLvl.normale);
                 eventChannel.sendMessage(":white_check_mark:   " + eventUser.getAsMention() + " successfully updated commands").queue();
-            }, failure -> {
+            }, 
+            failure -> {
                 Logger.log("S_Admin - bot updatecommands", "failed to update all commands", LogLvl.normale);
                 eventChannel.sendMessage(":x:   " + eventUser.getAsMention().toString() + " failed to update commands").queue();
             }
-        );
-        event.reply("Queued command update").queue();;
+            );
+            event.reply("Queued command update").queue();
         } else if (!eventOption) {
             Logger.log("S_Admin - bot updatecommands", eventUser.getName() + " tried to update the commands", LogLvl.normale);
             event.reply(":x:   Your tried to update the commands. Retry with confirme:True").queue();
@@ -383,6 +390,28 @@ public class S_Admin {
         } else  if (!eventOption) {
             Logger.log("S_Admin - bot shutdown", eventUser.getName() + " did not agree to shutdown the bot", LogLvl.moderate);
             event.reply(":x:   You did not agree to shutdown the bot. Retry with confirme:True").queue();
+        }
+    }
+
+    private static void msapi_reauthorize(SlashCommandInteractionEvent event) {
+        String subcommandName = event.getSubcommandName();
+        switch (subcommandName) {
+            case "reauthorize":
+                Boolean eventOption = event.getOption("get").getAsBoolean();
+                if (eventOption) {
+                    String authurl = MsAuth.getAuthurl();
+                    event.reply("Klick the button down below, to register with 'gbetododc@outlook.de'")
+                        .addActionRow(
+                            Button.link(authurl, "authenticate"))
+                        .queue();
+                } else if (!eventOption) {
+                    event.reply(":x:     Failed, retry with get:True").queue();
+                }
+                break;
+            case "authcode":
+                // continue to make the token request with authcode in MsAuth.java
+                // TODO: Make a website to redirect uri on jars-style.ddns.net, which shows the authcode together with a copy button
+                break;
         }
     }
 }

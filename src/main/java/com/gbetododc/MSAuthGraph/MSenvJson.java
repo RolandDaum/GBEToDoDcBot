@@ -1,39 +1,31 @@
 package com.gbetododc.MSAuthGraph;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import com.gbetododc.DiscordBot.DiscordBot;
 import com.google.gson.Gson;
 
-import okio.Path;
+public class MSenvJson {
+    static String jsonFilePathString = DiscordBot.PROJPATH + "\\src\\main\\java\\com\\gbetododc\\MSAuthGraph\\MSenv.json";
 
-public class EnvJson {
-    static String jsonFilePath = DiscordBot.PROJPATH + "\\src\\main\\java\\com\\gbetododc\\MSAuthGraph\\MSenv.json";
-
-    public static void main(String[] args) {
+    public static MSenv getMSenv() {
         try {
-            String jsonData = new String(Files.readAllBytes(Paths.get(jsonFilePath)));
+            String jsonDataString = new String(Files.readAllBytes(Paths.get(jsonFilePathString)));
             Gson gson = new Gson();
-            MSenv json = gson.fromJson(jsonData, MSenv.class);
-    
-            // Access and print individual fields
-            System.out.println(json.getReqCredentials().getClientId());
-
-            json.getValues().setToken("1234TEST");
-            System.out.println(json.getValues().getToken());
-
-            save(json.toString());
-        } catch (IOException e) {}
+            MSenv Gjson = gson.fromJson(jsonDataString, MSenv.class);
+            return Gjson;
+        } catch (Throwable e) {return null;}
     }
-    
-
-    public static Boolean save(String JsonString) {
-        try {
-            Files.write(Paths.get(jsonFilePath), JsonString.getBytes());
-        } catch (IOException  e) {
+    public static Boolean saveMSenv(MSenv Gjson) {
+        try (FileWriter filewriter = new FileWriter(jsonFilePathString)) {
+            Gson gson = new Gson();
+            filewriter.write(gson.toJson(Gjson));
+            filewriter.close();
+            return true;
         }
-        return null;
+        catch (Throwable e) {return false;}
     }
 
     public class MSenv {

@@ -1,5 +1,6 @@
 package com.gbetododc.DiscordBot.Commands.admin;
 
+import com.gbetododc.DiscordBot.DiscordBot;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
 
@@ -13,12 +14,8 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandGroupData;
 public class S_Admin_Setup {
     static Dotenv dotenv = Dotenv.configure().load();
 
-    public static void setup(JDA jda) {
-
-
-        jda.getGuildById(dotenv.get("GUILDID"))
-            .upsertCommand("admin", "admin settings")
-
+    public static void setup() {
+        DiscordBot.MAIINSERVERGUILD.upsertCommand("admin", "admin settings")
             .addSubcommandGroups(
                 new SubcommandGroupData("roles", "manage roles")
                     .addSubcommands(
@@ -67,33 +64,33 @@ public class S_Admin_Setup {
                 new SubcommandGroupData("msapi","manage msapi")
                     .addSubcommands(
 
-                        new SubcommandData("token", "manage the token")
-                            .addOption(OptionType.BOOLEAN, "get", "output the current token")
-                            .addOption(OptionType.BOOLEAN, "delete", "remove the current token")
-                            .addOption(OptionType.BOOLEAN, "refresh", "refresh the current token")
-                            .addOption(OptionType.BOOLEAN, "expire", "output the tokens expiration date"),
+                        // new SubcommandData("token", "manage the token")
+                        //     .addOption(OptionType.BOOLEAN, "get", "output the current token")
+                        //     .addOption(OptionType.BOOLEAN, "delete", "remove the current token")
+                        //     .addOption(OptionType.BOOLEAN, "refresh", "refresh the current token")
+                        //     .addOption(OptionType.BOOLEAN, "expire", "output the tokens expiration date"),
 
-                        new SubcommandData("refreshtoken", "manage the refresh token")
-                            .addOption(OptionType.BOOLEAN, "get", "output the current refreshtoken")
-                            .addOption(OptionType.BOOLEAN, "delete", "remove the current refreshtoken")
-                            .addOption(OptionType.BOOLEAN, "refresh", "refresh the current refreshtoken")
-                            .addOption(OptionType.BOOLEAN, "expire", "output the tokens expiration date"),
+                        // new SubcommandData("refreshtoken", "manage the refresh token")
+                        //     .addOption(OptionType.BOOLEAN, "get", "output the current refreshtoken")
+                        //     .addOption(OptionType.BOOLEAN, "delete", "remove the current refreshtoken")
+                        //     .addOption(OptionType.BOOLEAN, "refresh", "refresh the current refreshtoken")
+                        //     .addOption(OptionType.BOOLEAN, "expire", "output the tokens expiration date"),
 
-                        new SubcommandData("clientsecret", "manage the client secret")
-                            .addOption(OptionType.STRING, "change", "change the clientsecret")
-                            .addOption(OptionType.BOOLEAN, "get", "output the current clientsecret")
+                        // new SubcommandData("clientsecret", "manage the client secret")
+                        //     .addOption(OptionType.STRING, "change", "change the clientsecret")
+                        //     .addOption(OptionType.BOOLEAN, "get", "output the current clientsecret"),
+
+                        new SubcommandData("reauthorize", "ommand for reauthentication")
+                            .addOption(OptionType.BOOLEAN, "get", "get reauth url")
+                            .addOption(OptionType.STRING, "authcode", "enter authcode")
                     )
             )
-
-                // .addOptions(
-                //     new OptionData(OptionType.STRING, "remove rolles", "remove a specific group of roles")
-                //         .addChoice("all - (Dangerous never do this)", "remall")
-                //         .addChoice("subjects - (For development purpose only)", "remsubj")
-                //         .addChoice("specific - ()", "remsubj")
-                // )
             .queue(
                 sucess -> {
                     Logger.log("S_Admin_Setup - Setup", "Successfully added /admin command", LogLvl.normale);
+                },
+                failure -> {
+                    Logger.log("S_Admin_Setup - Setup", "failed to update '/admin' command", LogLvl.moderate);
                 }
             );
         
