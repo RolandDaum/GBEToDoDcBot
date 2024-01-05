@@ -1,22 +1,18 @@
 package com.gbetododc.DiscordBot.Commands.admin;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import com.gbetododc.DiscordBot.DiscordBot;
 import com.gbetododc.DiscordBot.Commands.register.S_Register_Setup;
-import com.gbetododc.DiscordBot.Commands.settings.S_Settings_Setup;
 import com.gbetododc.MSAuthGraph.MsAuth;
 import com.gbetododc.System.CJson;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.GuildWelcomeScreen.Channel;
 import net.dv8tion.jda.api.entities.channel.unions.MessageChannelUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -62,11 +58,8 @@ public class S_Admin {
                 break;
             case "msapi":
                 switch (event.getSubcommandName()) {
-                    case "token":
-                        break;
                     case "refreshtoken":
-                        break;
-                    case "clientsecret":
+                        msapi_refreshtoken(event);
                         break;
                     case "reauthorize":
                         msapi_reauthorize(event);
@@ -394,24 +387,44 @@ public class S_Admin {
     }
 
     private static void msapi_reauthorize(SlashCommandInteractionEvent event) {
-        String subcommandName = event.getSubcommandName();
-        switch (subcommandName) {
-            case "reauthorize":
-                Boolean eventOption = event.getOption("get").getAsBoolean();
-                if (eventOption) {
-                    String authurl = MsAuth.getAuthurl();
-                    event.reply("Klick the button down below, to register with 'gbetododc@outlook.de'")
-                        .addActionRow(
-                            Button.link(authurl, "authenticate"))
-                        .queue();
-                } else if (!eventOption) {
-                    event.reply(":x:     Failed, retry with get:True").queue();
-                }
-                break;
-            case "authcode":
-                // continue to make the token request with authcode in MsAuth.java
-                // TODO: Make a website to redirect uri on jars-style.ddns.net, which shows the authcode together with a copy button
-                break;
-        }
+        MessageChannelUnion eventChannel = event.getChannel();
+        User eventUser = event.getUser();
+        List<OptionMapping> optionList = event.getOptions();
+        if (optionList.size() == 2) {
+            event.reply(":x:     Just choose one option");
+        } else if (optionList.size() == 1) {
+            switch (optionList.get(0).getName()) {
+                case "get":
+                    Boolean eventOption = event.getOption("get").getAsBoolean();
+                    if (eventOption) {
+                        String authurl = MsAuth.getAuthurl();
+                        event.reply("Klick the button down below, to register with 'gbetododc@outlook.de'")
+                            .addActionRow(
+                                Button.link(authurl, "authenticate"))
+                            .queue();
+                    } else if (!eventOption) {
+                        event.reply(":x:     Failed, retry with get:True").queue();
+                    }
+                    break;
+            
+                case "authcode":
+                    String authcode = event.getOption("authcode").getAsString();
+                    if (authcode != null) {
+                        MsAuth.tokenAuthcode(authcode, () -> {
+                            eventChannel.sendMessage(eventUser.getAsMention() + " successfull request").queue();
+                        });
+                    }
+                    event.reply("queued").queue();
+                    break;
+            }
+        }   
+    }
+    private static void msapi_refreshtoken(SlashCommandInteractionEvent event) {
+        MessageChannelUnion eventChannel = event.getChannel();
+        String eventOption = event.getOption("refreshtoken").getAsString();
+        MsAuth.tokenRT(eventOption, () -> {
+            eventChannel.sendMessage(":white_check_mark:   successfull token refresh").queue();
+        });
+        event.reply("queued refreshing process").queue();
     }
 }

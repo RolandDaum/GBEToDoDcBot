@@ -3,9 +3,7 @@ package com.gbetododc.DiscordBot.Commands.admin;
 import com.gbetododc.DiscordBot.DiscordBot;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
-
 import io.github.cdimascio.dotenv.Dotenv;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
@@ -63,26 +61,11 @@ public class S_Admin_Setup {
 
                 new SubcommandGroupData("msapi","manage msapi")
                     .addSubcommands(
-
-                        // new SubcommandData("token", "manage the token")
-                        //     .addOption(OptionType.BOOLEAN, "get", "output the current token")
-                        //     .addOption(OptionType.BOOLEAN, "delete", "remove the current token")
-                        //     .addOption(OptionType.BOOLEAN, "refresh", "refresh the current token")
-                        //     .addOption(OptionType.BOOLEAN, "expire", "output the tokens expiration date"),
-
-                        // new SubcommandData("refreshtoken", "manage the refresh token")
-                        //     .addOption(OptionType.BOOLEAN, "get", "output the current refreshtoken")
-                        //     .addOption(OptionType.BOOLEAN, "delete", "remove the current refreshtoken")
-                        //     .addOption(OptionType.BOOLEAN, "refresh", "refresh the current refreshtoken")
-                        //     .addOption(OptionType.BOOLEAN, "expire", "output the tokens expiration date"),
-
-                        // new SubcommandData("clientsecret", "manage the client secret")
-                        //     .addOption(OptionType.STRING, "change", "change the clientsecret")
-                        //     .addOption(OptionType.BOOLEAN, "get", "output the current clientsecret"),
-
                         new SubcommandData("reauthorize", "ommand for reauthentication")
-                            .addOption(OptionType.BOOLEAN, "get", "get reauth url")
-                            .addOption(OptionType.STRING, "authcode", "enter authcode")
+                            .addOption(OptionType.BOOLEAN, "get", "get reauth url") // get weg und dann einfach nochmal ohne irgendeine option machen, um den Link zu bekommen
+                            .addOption(OptionType.STRING, "authcode", "enter authcode"),
+                        new SubcommandData("refreshtoken", "get a new token set by manual entering the refreshtoken")
+                            .addOption(OptionType.STRING, "refreshtoken", "enter refreshtoken", true)
                     )
             )
             .queue(

@@ -2,11 +2,9 @@ package com.gbetododc.DiscordBot.Commands.register;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.gbetododc.DiscordBot.DiscordBot;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
-
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;

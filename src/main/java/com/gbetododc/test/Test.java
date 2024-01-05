@@ -1,17 +1,7 @@
 package com.gbetododc.Test;
 
-import java.io.IOException;
-
-import com.gbetododc.MSAuthGraph.EnvJson;
-
 public class Test {    
   
-    public static void main(String[] args) {
-        try {
-            System.out.println(EnvJson.read().getValues());
-        } catch (IOException e) {}
-    }
-
 
     // public static void stingEqul() {
     //     System.out.println("String mit String direkt: " + ("MA1" == "MA1"));

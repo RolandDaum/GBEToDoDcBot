@@ -1,9 +1,12 @@
 package com.gbetododc.MSAuthGraph;
 
 import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.List;
+
 import com.gbetododc.DiscordBot.DiscordBot;
 import com.google.gson.Gson;
 
@@ -47,11 +50,11 @@ public class MSenvJson {
         public void setRFToken(String RFTOKEN) {this.RFToken = RFTOKEN;}
     
         public String getExpiryDate() {return ExpiryDate;}
-        public void setExpiryDate(String EXPIRYDATE) {this.ExpiryDate = EXPIRYDATE;}
+        public void setExpiryDate(String timestamp) {this.ExpiryDate = timestamp;}
 
     }
     class ReqCredentials {
-        private String scopes;
+        private List<String> scopes;
         private String client_id;
         private String redirect_URI;
         private String url_auth;
@@ -59,8 +62,8 @@ public class MSenvJson {
         private String url_graph;
         private String ToDoListID;
     
-        public String getScopes() {return scopes;}
-        public void setScopes(String SCOPES) {this.scopes = SCOPES;}
+        public List<String> getScopes() {return scopes;}
+        public void setScopes(List<String> SCOPES) {this.scopes = SCOPES;}
     
         public String getClientId() {return client_id;}
         public void setClientId(String CLIENTID) {this.client_id = CLIENTID;}

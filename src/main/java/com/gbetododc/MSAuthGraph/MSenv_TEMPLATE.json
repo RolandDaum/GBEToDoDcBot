@@ -1,0 +1,19 @@
+{
+  "values": {
+    "Token": "",
+    "RFToken": "",
+    "ExpiryDate": ""
+  },
+  "ReqCredentials": {
+    "scopes": [
+      "",
+      ""
+    ],
+    "client_id": "",
+    "redirect_URI": "",
+    "url_auth": "",
+    "url_token": "",
+    "url_graph": "",
+    "ToDoListID": ""
+  }
+}
