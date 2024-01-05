@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>redirect</title>
+</head>
+<body>
+    <div id="bgoverlaydiv">
+        <div id="codecopydiv">
+            <h1 id="code"></h1>
+            <img id="copy" src="../assests/copy.svg">
+        </div>
+    </div>
+</body>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Nova+Mono&display=swap');
+    * {
+        font-family: "Nova Mono";
+        color: #FDFCFC;
+    }
+    body {
+        background-image: url("../assests/Circuit\ Board.svg");
+        background-size: cover;
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+    }
+    #bgoverlaydiv {
+        height: 100vh;
+        width: 100vw;
+        backdrop-filter: blur(5px);
+        background-color: transparent;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #codecopydiv {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        border: 2px solid #fdfcfc77;
+        padding: 0px 30px 0px 30px;
+        margin-left: 50px;
+        margin-right: 50px;
+        border-radius: 10000px;
+        backdrop-filter: blur(100000px);
+        background-color: transparent;
+    }
+    #code {
+        font-size: 30px;
+        margin-right: 25px;
+    }
+    #copy {
+        height: 40px;
+        aspect-ratio: 1/1;
+        user-select: none;
+    }
+    #copy:hover {
+        cursor: pointer;
+    }
+</style>
+<script>
+    const code = new URLSearchParams(window.location.search).get("code")
+    document.getElementById("code").innerHTML = code
+    document.getElementById("copy").addEventListener("click", () => {
+        navigator.clipboard.writeText(code)
+        document.getElementById("copy").src = '../assests/check.svg'
+        setTimeout(function () {
+            document.getElementById("copy").src = "../assests/copy.svg";
+        }, 1000);
+    })
+
+</script>
+</html>
