@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.gbetododc.DiscordBot.DiscordBot;
 import com.gbetododc.DiscordBot.Commands.register.S_Register_Setup;
 import com.gbetododc.MSAuthGraph.MsAuth;
+import com.gbetododc.MSAuthGraph.MsAuth.Callback;
 import com.gbetododc.System.CJson;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
@@ -410,8 +411,15 @@ public class S_Admin {
                 case "authcode":
                     String authcode = event.getOption("authcode").getAsString();
                     if (authcode != null) {
-                        MsAuth.tokenAuthcode(authcode, () -> {
-                            eventChannel.sendMessage(eventUser.getAsMention() + " successfull request").queue();
+                        // MsAuth.tokenAuthcode(authcode, () -> {
+                        // eventChannel.sendMessage(":white_check_mark:   " + eventUser.getAsMention() + " successfull token refresh").queue();
+                        // });
+                        MsAuth.tokenAuthcode(authcode, Boolean -> {
+                            if (Boolean) {
+                                eventChannel.sendMessage(":white_check_mark:   " + eventUser.getAsMention() + " successfull token refresh").queue();
+                            } else if (!Boolean) {
+                                eventChannel.sendMessage(":x:   " + eventUser.getAsMention() + " failed to refresh the token").queue();
+                            }
                         });
                     }
                     event.reply("queued").queue();
@@ -422,8 +430,9 @@ public class S_Admin {
     private static void msapi_refreshtoken(SlashCommandInteractionEvent event) {
         MessageChannelUnion eventChannel = event.getChannel();
         String eventOption = event.getOption("refreshtoken").getAsString();
+        User eventUser = event.getUser();
         MsAuth.tokenRT(eventOption, () -> {
-            eventChannel.sendMessage(":white_check_mark:   successfull token refresh").queue();
+            eventChannel.sendMessage(":white_check_mark:   " + eventUser.getAsMention() + " successfull token refresh").queue();
         });
         event.reply("queued refreshing process").queue();
     }
