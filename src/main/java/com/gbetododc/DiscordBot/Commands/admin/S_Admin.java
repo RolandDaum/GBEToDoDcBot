@@ -6,7 +6,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.gbetododc.DiscordBot.DiscordBot;
 import com.gbetododc.DiscordBot.Commands.register.S_Register_Setup;
 import com.gbetododc.MSAuthGraph.MsAuth;
-import com.gbetododc.MSAuthGraph.MsAuth.Callback;
 import com.gbetododc.System.CJson;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
@@ -366,7 +365,7 @@ public class S_Admin {
         Boolean eventOption = event.getOption("confirme").getAsBoolean();
         MessageChannelUnion eventChannel = event.getChannel();
 
-        Logger.log("S_Admin - bot", eventUser.getName() + " executed /admin bot shutdown confirme:" + eventOption, LogLvl.Title);
+        Logger.log("S_Admin - bot", eventUser.getName() + " executed '/admin bot shutdown confirme:" + eventOption + "'", LogLvl.Title);
 
         if (eventOption) {
             Logger.log("Shutting Bot down ...", eventUser.getName() + " is shutting down the bot", LogLvl.critical);
@@ -390,49 +389,45 @@ public class S_Admin {
     private static void msapi_reauthorize(SlashCommandInteractionEvent event) {
         MessageChannelUnion eventChannel = event.getChannel();
         User eventUser = event.getUser();
-        List<OptionMapping> optionList = event.getOptions();
-        if (optionList.size() == 2) {
-            event.reply(":x:     Just choose one option");
-        } else if (optionList.size() == 1) {
-            switch (optionList.get(0).getName()) {
-                case "get":
-                    Boolean eventOption = event.getOption("get").getAsBoolean();
-                    if (eventOption) {
-                        String authurl = MsAuth.getAuthurl();
-                        event.reply("Klick the button down below, to register with 'gbetododc@outlook.de'")
-                            .addActionRow(
-                                Button.link(authurl, "authenticate"))
-                            .queue();
-                    } else if (!eventOption) {
-                        event.reply(":x:     Failed, retry with get:True").queue();
+        List<OptionMapping> eventOptionList = event.getOptions();
+        if (eventOptionList.isEmpty()) {
+            Logger.log("S_Admin - msapi_reauthorize", eventUser.getName() + " executed '/admin msapi reauthorize' to reregister the account", LogLvl.moderate);
+            String authurl = MsAuth.getAuthurl();
+            event.reply("Klick the button down below, to register with 'gbetododc@outlook.de'")
+                .addActionRow(
+                    Button.link(authurl, "authenticate")
+                )
+                .queue();
+        } else {
+            // String eventOption = event.getOption("authcode").getAsString()
+            Logger.log("S_Admin - msapi_reauthorize", eventUser.getName() + " executed '/admin msapi reauthorize' to enter the authcode", LogLvl.moderate);
+            String authcode = event.getOption("authcode").getAsString();
+            if (authcode != null) {
+                MsAuth.tokenAuthcode(authcode, success -> {
+                    if (success) {
+                        Logger.log("S_Admin - msapi_reauthorize", eventUser.getName() + " successfully reregeristed the account and got a new token set", LogLvl.normale);
+                        eventChannel.sendMessage(":white_check_mark:   " + eventUser.getAsMention() + " successfull token request from the new account").queue();
+                    } else if (!success) {
+                        Logger.log("S_Admin - msapi_reauthorize", eventUser.getName() + " failed the reregistration with the new accound and couldn't get a new token set", LogLvl.critical);
+                        eventChannel.sendMessage(":x:   " + eventUser.getAsMention() + " failed the token request from the new account").queue();
                     }
-                    break;
-            
-                case "authcode":
-                    String authcode = event.getOption("authcode").getAsString();
-                    if (authcode != null) {
-                        // MsAuth.tokenAuthcode(authcode, () -> {
-                        // eventChannel.sendMessage(":white_check_mark:   " + eventUser.getAsMention() + " successfull token refresh").queue();
-                        // });
-                        MsAuth.tokenAuthcode(authcode, Boolean -> {
-                            if (Boolean) {
-                                eventChannel.sendMessage(":white_check_mark:   " + eventUser.getAsMention() + " successfull token refresh").queue();
-                            } else if (!Boolean) {
-                                eventChannel.sendMessage(":x:   " + eventUser.getAsMention() + " failed to refresh the token").queue();
-                            }
-                        });
-                    }
-                    event.reply("queued").queue();
-                    break;
+                });
             }
-        }   
+            event.reply("queued").queue();
+        }
     }
     private static void msapi_refreshtoken(SlashCommandInteractionEvent event) {
         MessageChannelUnion eventChannel = event.getChannel();
-        String eventOption = event.getOption("refreshtoken").getAsString();
         User eventUser = event.getUser();
-        MsAuth.tokenRT(eventOption, () -> {
-            eventChannel.sendMessage(":white_check_mark:   " + eventUser.getAsMention() + " successfull token refresh").queue();
+        Logger.log("S_Admin - msapi_refreshtoken", eventUser.getName() + " executed '/admin msapi refreshtoken'", LogLvl.normale);
+        MsAuth.tokenRT(success -> {
+            if (success) {
+                Logger.log("S_Admin - msapi_refreshtoken", eventUser.getName() + " successfully refresh the token via RFToken", LogLvl.normale);
+                eventChannel.sendMessage(":white_check_mark:   " + eventUser.getAsMention() + " recieved a new token set via the RFToken").queue();
+            } else if (!success) {
+                Logger.log("S_Admin - msapi_refreshtoken", eventUser.getName() + " failed to refresh the token via RFToken", LogLvl.critical);
+                eventChannel.sendMessage(":x:     " + eventUser.getAsMention() + " failed to recieve a new token set via the RFToken").queue();
+            }
         });
         event.reply("queued refreshing process").queue();
     }

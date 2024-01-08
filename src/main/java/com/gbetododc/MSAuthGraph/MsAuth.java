@@ -7,7 +7,6 @@ import com.gbetododc.MSAuthGraph.MSenvJson.MSenv;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
 import com.gbetododc.Test.Test;
-import com.gbetododc.Test.Test.MeinConsumer;
 import com.google.gson.Gson;
 import io.github.cdimascio.dotenv.Dotenv;
 import kong.unirest.Unirest;
@@ -65,17 +64,20 @@ public class MsAuth {
                 .field("scope", scopes)
                 .asJsonAsync(
                     response -> {
+                        Boolean success;
                         Integer statuscode = response.getStatus();
                         String respBody = response.getBody().toString();
                         switch (statuscode) {
                             case 200:
                                 saveTKresponse(respBody);
-                                callback.accept(true);
+                                success = true;
+                                callback.accept(success);
                                 break;
                         
                             case 400:
                                 TKerrorResp errorResp = getTKerrorResp(respBody);
-                                callback.accept(false);
+                                success = false;
+                                callback.accept(success);
                                 Logger.log(
                                     "MsAuth - RFTokenRq", 
                                     errorResp.getTimestamp() + " " + errorResp.getError() + "\n" + 
@@ -85,7 +87,8 @@ public class MsAuth {
                                 );
                                 break;
                             default:
-                                callback.accept(false);
+                                success = false;
+                                callback.accept(success);
                                 Logger.log("MsAuth - TokenReq with RF Token", "Error " + statuscode + "\n" + respBody, LogLvl.critical);
                                 break;
                         }
@@ -98,8 +101,11 @@ public class MsAuth {
         }
 
     }
-    // TODO: get RFToken from MSenv.json
-    public static void tokenRT(String rftoken, Runnable success) {
+    /**
+     * Refresh the ms auth cred
+     * @param callback
+     */
+    public static void tokenRT(Consumer<Boolean> callback) {
         MSenv msenvJson = MSenvJson.getMSenv();
         List<String> scopeList = msenvJson.getReqCredentials().getScopes();
         String scopes = "";
@@ -114,22 +120,26 @@ public class MsAuth {
         try {
             Unirest.post(msenvJson.getReqCredentials().getUrl_token())
                 .field("grant_type", "refresh_token")
-                .field("refresh_token", rftoken)
+                .field("refresh_token", msenvJson.getValues().getRFToken())
                 .field("client_secret", dotenv.get("MSAUTHCLIENTSECRET"))
                 .field("client_id", msenvJson.getReqCredentials().getClientId())
                 .field("redirect_uri", msenvJson.getReqCredentials().getRedirect_URI())
                 .field("scope", scopes)
                 .asJsonAsync(
                     response -> {
+                        Boolean success;
                         Integer statuscode = response.getStatus();
                         String respBody = response.getBody().toString();
                         switch (statuscode) {
                             case 200:
                                 saveTKresponse(respBody);
-                                success.run();
+                                success = true;
+                                callback.accept(success);
                                 break;
                         
                             case 400:
+                                success = false;
+                                callback.accept(success);
                                 TKerrorResp errorResp = getTKerrorResp(respBody);
                                 Logger.log(
                                     "MsAuth - RFTokenRq", 
@@ -141,6 +151,8 @@ public class MsAuth {
                                 break;
 
                             default:
+                                success = false;
+                                callback.accept(success);
                                 Logger.log("MsAuth - TokenReq with RF Token", "Error " + statuscode + "\n" + respBody, LogLvl.critical);
                                 break;
                         }

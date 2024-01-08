@@ -62,10 +62,8 @@ public class S_Admin_Setup {
                 new SubcommandGroupData("msapi","manage msapi")
                     .addSubcommands(
                         new SubcommandData("reauthorize", "ommand for reauthentication")
-                            .addOption(OptionType.BOOLEAN, "get", "get reauth url") // get weg und dann einfach nochmal ohne irgendeine option machen, um den Link zu bekommen
                             .addOption(OptionType.STRING, "authcode", "enter authcode"),
-                        new SubcommandData("refreshtoken", "get a new token set by manual entering the refreshtoken")
-                            .addOption(OptionType.STRING, "refreshtoken", "enter refreshtoken", true)
+                        new SubcommandData("refreshtoken", "refresh auth cred via the RFToken")
                     )
             )
             .queue(
