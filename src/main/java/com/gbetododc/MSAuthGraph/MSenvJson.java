@@ -3,11 +3,10 @@ package com.gbetododc.MSAuthGraph;
 import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.List;
-
 import com.gbetododc.DiscordBot.DiscordBot;
+import com.gbetododc.System.Logger;
+import com.gbetododc.System.Logger.LogLvl;
 import com.google.gson.Gson;
 
 public class MSenvJson {
@@ -19,7 +18,10 @@ public class MSenvJson {
             Gson gson = new Gson();
             MSenv Gjson = gson.fromJson(jsonDataString, MSenv.class);
             return Gjson;
-        } catch (Throwable e) {return null;}
+        } catch (Throwable e) {
+            Logger.log("MSenvJson - getMSenv", "Failed to read MSenv.json. It may be missing or currepted", LogLvl.critical);
+            return null;
+        }
     }
     public static Boolean saveMSenv(MSenv Gjson) {
         try (FileWriter filewriter = new FileWriter(jsonFilePathString)) {

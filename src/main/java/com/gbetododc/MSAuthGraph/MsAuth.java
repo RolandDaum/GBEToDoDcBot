@@ -6,7 +6,6 @@ import java.util.function.Consumer;
 import com.gbetododc.MSAuthGraph.MSenvJson.MSenv;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
-import com.gbetododc.Test.Test;
 import com.google.gson.Gson;
 import io.github.cdimascio.dotenv.Dotenv;
 import kong.unirest.Unirest;
@@ -44,6 +43,11 @@ public class MsAuth {
     // */
     public static void tokenAuthcode(String authcode, Consumer<Boolean> callback) {
         MSenv msenvJson = MSenvJson.getMSenv();
+        if (msenvJson == null) {
+            Boolean success = false;
+            callback.accept(success);
+            return;
+        }
         List<String> scopeList = msenvJson.getReqCredentials().getScopes();
         String scopes = "";
         for (String scope : scopeList) {
@@ -107,6 +111,11 @@ public class MsAuth {
      */
     public static void tokenRT(Consumer<Boolean> callback) {
         MSenv msenvJson = MSenvJson.getMSenv();
+        if (msenvJson == null) {
+            Boolean success = false;
+            callback.accept(success);
+            return;
+        }
         List<String> scopeList = msenvJson.getReqCredentials().getScopes();
         String scopes = "";
         for (String scope : scopeList) {
@@ -167,12 +176,15 @@ public class MsAuth {
 
     public static void saveTKresponse(String tkrespString) {
         TKresp tkresp = new Gson().fromJson(tkrespString, TKresp.class);
-        MSenv msenv = MSenvJson.getMSenv();
-        msenv.getValues().setToken(tkresp.getAccessToken());
-        msenv.getValues().setRFToken(tkresp.getRefreshToken());
-        msenv.getValues().setExpiryDate((new Timestamp(System.currentTimeMillis() + (tkresp.getExpiresIn()*1000))).toString());
+        MSenv msenvJson = MSenvJson.getMSenv();
+        if (msenvJson.equals(null)) {
+            return;
+        }
+        msenvJson.getValues().setToken(tkresp.getAccessToken());
+        msenvJson.getValues().setRFToken(tkresp.getRefreshToken());
+        msenvJson.getValues().setExpiryDate((new Timestamp(System.currentTimeMillis() + (tkresp.getExpiresIn()*1000))).toString());
 
-        MSenvJson.saveMSenv(msenv);
+        MSenvJson.saveMSenv(msenvJson);
     }
     public class TKresp {
         // private String token_type;

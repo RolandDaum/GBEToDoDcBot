@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.gbetododc.DiscordBot.DiscordBot;
 import com.gbetododc.DiscordBot.Commands.register.S_Register_Setup;
 import com.gbetododc.MSAuthGraph.MsAuth;
+import com.gbetododc.MSAuthGraph.MsGraph;
 import com.gbetododc.System.CJson;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
@@ -63,6 +64,9 @@ public class S_Admin {
                         break;
                     case "reauthorize":
                         msapi_reauthorize(event);
+                        break;
+                    case "refreshtodo":
+                        msapi_refreshtodo(event);
                         break;
                 }
                 break;
@@ -430,5 +434,9 @@ public class S_Admin {
             }
         });
         event.reply("queued refreshing process").queue();
+    }
+    private static void msapi_refreshtodo(SlashCommandInteractionEvent event) {
+        MsGraph.refreshToDoList();
+        event.reply("null").queue();
     }
 }

@@ -63,7 +63,8 @@ public class S_Admin_Setup {
                     .addSubcommands(
                         new SubcommandData("reauthorize", "ommand for reauthentication")
                             .addOption(OptionType.STRING, "authcode", "enter authcode"),
-                        new SubcommandData("refreshtoken", "refresh auth cred via the RFToken")
+                        new SubcommandData("refreshtoken", "refresh auth cred via the RFToken"),
+                        new SubcommandData("refreshtodo", "refresh the todo list")
                     )
             )
             .queue(
