@@ -11,9 +11,13 @@ import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
 import com.google.gson.Gson;
 
-public class MSenvJson {
+public class JsonMSenv {
     static String jsonFilePathString = DiscordBot.PROJPATH + "\\src\\main\\java\\com\\gbetododc\\MSAuthGraph\\MSenv.json";
 
+    /**
+     * Get the MSenv.json as an MSenv Obj
+     * @return MSenv object
+     */
     public static MSenv getMSenv() {
         try {
             String jsonDataString = new String(Files.readAllBytes(Paths.get(jsonFilePathString)));
@@ -25,6 +29,12 @@ public class MSenvJson {
             return null;
         }
     }
+    
+    /**
+     * Saves the provided MSenv Obj
+     * @param Gjson as MSenv Object
+     * @callback saved as Boolean
+     */
     public static void saveMSenv(MSenv Gjson, Consumer<Boolean> callback) {
         try (FileWriter filewriter = new FileWriter(jsonFilePathString)) {
             Gson gson = new Gson();

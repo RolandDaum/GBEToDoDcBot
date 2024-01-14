@@ -3,7 +3,7 @@ package com.gbetododc.MSAuthGraph;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.function.Consumer;
-import com.gbetododc.MSAuthGraph.MSenvJson.MSenv;
+import com.gbetododc.MSAuthGraph.JsonMSenv.MSenv;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
 import com.google.gson.Gson;
@@ -13,8 +13,12 @@ import kong.unirest.Unirest;
 public class MsAuth {
     static Dotenv dotenv = Dotenv.configure().load();
 
+    /**
+     * Get the auth URL as a String
+     * @return auth URL
+     */
     public static String getAuthurl() {
-        MSenv msenvJson = MSenvJson.getMSenv();
+        MSenv msenvJson = JsonMSenv.getMSenv();
         List<String> scopeList = msenvJson.getReqCredentials().getScopes();
         String scopes = "";
         for (String scope : scopeList) {
@@ -35,14 +39,13 @@ public class MsAuth {
         return authurl;
     }
 
-    // /**
-    // * Get a Token and Refresh Token via the authcode
-    // *
-    // * @param authcode Authcode as a String
-    // * @return 
-    // */
+    /**
+    * Get a Token and Refresh Token via the authcode
+    * @param authcode Authcode as a String
+    * @return success as Boolean
+    */
     public static void tokenAuthcode(String authcode, Consumer<Boolean> callback) {
-        MSenv msenvJson = MSenvJson.getMSenv();
+        MSenv msenvJson = JsonMSenv.getMSenv();
         if (msenvJson == null) {
             Boolean success = false;
             callback.accept(success);
@@ -68,28 +71,35 @@ public class MsAuth {
                 .field("scope", scopes)
                 .asJsonAsync(
                     response -> {
-                        Boolean success;
                         Integer statuscode = response.getStatus();
                         String respBody = response.getBody().toString();
                         switch (statuscode) {
                             case 200:
-                                saveTKresponse(respBody);
-                                success = true;
-                                callback.accept(success);
+                                JsonMSenv.saveMSenv(aplyTKresp(respBody), saved -> {
+                                    Boolean success;
+                                    if (saved) {
+                                        success = true;
+                                        callback.accept(success);
+                                    } else if (!saved) {
+                                        success = false;
+                                        callback.accept(success);
+                                    } 
+                                });
                                 break;
                         
                             case 400:
                                 TKerrorResp errorResp = getTKerrorResp(respBody);
-                                success = false;
+                                Boolean success = false;
                                 callback.accept(success);
                                 Logger.log(
                                     "MsAuth - RFTokenRq", 
                                     errorResp.getTimestamp() + " " + errorResp.getError() + "\n" + 
                                     errorResp.getErrorDescription() + "\n" +
                                     errorResp.getErrorUri(), 
-                                    LogLvl.moderate
+                                    LogLvl.critical
                                 );
                                 break;
+
                             default:
                                 success = false;
                                 callback.accept(success);
@@ -107,10 +117,10 @@ public class MsAuth {
     }
     /**
      * Refresh the ms auth cred
-     * @param callback
+     * @return success as Boolean
      */
     public static void tokenRT(Consumer<Boolean> callback) {
-        MSenv msenvJson = MSenvJson.getMSenv();
+        MSenv msenvJson = JsonMSenv.getMSenv();
         if (msenvJson == null) {
             Boolean success = false;
             callback.accept(success);
@@ -140,16 +150,16 @@ public class MsAuth {
                         String respBody = response.getBody().toString();
                         switch (statuscode) {
                             case 200:
-                            MSenvJson.saveMSenv(saveTKresponse(respBody), saved -> {
-                                Boolean success;
-                                if (saved) {
-                                    success = true;
-                                    callback.accept(success);
-                                } else if (!saved) {
-                                    success = false;
-                                    callback.accept(success);
-                                } 
-                            });
+                                JsonMSenv.saveMSenv(aplyTKresp(respBody), saved -> {
+                                    Boolean success;
+                                    if (saved) {
+                                        success = true;
+                                        callback.accept(success);
+                                    } else if (!saved) {
+                                        success = false;
+                                        callback.accept(success);
+                                    } 
+                                });
                                 break;
                         
                             case 400:
@@ -161,7 +171,7 @@ public class MsAuth {
                                     errorResp.getTimestamp() + " " + errorResp.getError() + "\n" + 
                                     errorResp.getErrorDescription() + "\n" +
                                     errorResp.getErrorUri(), 
-                                    LogLvl.moderate
+                                    LogLvl.critical
                                 );
                                 break;
 
@@ -180,15 +190,13 @@ public class MsAuth {
         }
     }
 
-    // /**
-    // * Get a MSenv obj with the new parameters
-    // *
-    // * @param authcode Authcode as a String
-    // * @return 
-    // */
-    public static MSenv saveTKresponse(String tkrespString) {
+    /**
+    * Get a MSenv obj with the new parameters aplyed from the TKResponse
+    * @return MSenv Obj
+    */
+    public static MSenv aplyTKresp(String tkrespString) {
         TKresp tkresp = new Gson().fromJson(tkrespString, TKresp.class);
-        MSenv msenvJson = MSenvJson.getMSenv();
+        MSenv msenvJson = JsonMSenv.getMSenv();
         if (msenvJson.equals(null)) {return null;}
 
         msenvJson.getValues().setTokenType(tkresp.getTokenType());
@@ -198,6 +206,7 @@ public class MsAuth {
 
         return msenvJson;
     }
+
     public class TKresp {
         private String token_type;
         // private String scope;
@@ -211,7 +220,12 @@ public class MsAuth {
         public String getAccessToken() {return this.access_token;}
         public String getRefreshToken() {return this.refresh_token;}
     }
-
+    
+    /**
+     * Transforms an Token Erro Response into an TKerrorResp Obj
+     * @param erroResp as String
+     * @return TKerroResp
+     */
     public static TKerrorResp getTKerrorResp(String errorResp) {
         Gson gson = new Gson();
         TKerrorResp tkerrorresp = gson.fromJson(errorResp, TKerrorResp.class);
@@ -234,5 +248,4 @@ public class MsAuth {
         public String getCorrelationId() { return this.correlation_id; }
         public String getErrorUri() { return this.error_uri; }
     }
-    
 }

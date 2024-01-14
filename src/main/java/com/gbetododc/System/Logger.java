@@ -18,6 +18,7 @@ public class Logger {
         normale,
         moderate,
         critical,
+        command,
         Title
     }
 
@@ -74,7 +75,10 @@ public class Logger {
                     }
                 } catch (Throwable e) {}
                 break;
+            case command:
+                System.out.println(ConsoleColors.BLACK + "[" + dateTime + "] " + ConsoleColors.BLACK + "[" + logtitle + "] " + ConsoleColors.WHITE + logmessage);
 
+                break;
             case Title:
                 System.out.println(ConsoleColors.BLACK + "[" + dateTime + "] " + ConsoleColors.PURPLE_BOLD + "[" + logtitle + "] " + ConsoleColors.WHITE + logmessage);
                 try {

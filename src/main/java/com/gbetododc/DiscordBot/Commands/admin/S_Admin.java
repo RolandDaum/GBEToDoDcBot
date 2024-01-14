@@ -77,7 +77,7 @@ public class S_Admin {
         User eventUser = event.getUser();
         String eventOption = event.getOption("roletypes").getAsString();
         
-        Logger.log("S_Admin - roles list", eventUser.getName().toString() + " executed /admin roles list roletypes:" + eventOption, LogLvl.Title);
+        Logger.log("S_Admin - roles list", eventUser.getName().toString() + " executed /admin roles list roletypes:" + eventOption, LogLvl.command);
 
         switch (eventOption) {
             case "all":
@@ -124,7 +124,7 @@ public class S_Admin {
         User eventUser = event.getUser();
         MessageChannelUnion eventChannel = event.getChannel();
 
-        Logger.log("S_Admin - roles add", event.getUser().getName() + " executed /admin roles add rolename:" + rolename + " coursetype:" + courseroletype, LogLvl.Title);
+        Logger.log("S_Admin - roles add", event.getUser().getName() + " executed /admin roles add rolename:" + rolename + " coursetype:" + courseroletype, LogLvl.command);
 
         Map<String, Map<String, Long>> coursemap = CJson.getcoursemap();
         Role roleOnserverifExisting = event.getGuild().getRolesByName(rolename, true).stream().findFirst().orElse(null);
@@ -200,7 +200,7 @@ public class S_Admin {
         String coursetype = event.getOption("coursetype", null, OptionMapping::getAsString);
         Map<String, Map<String, Long>> coursemap = CJson.getcoursemap();
 
-        Logger.log("S_Admin - roles remove", event.getUser().getName() + " executed /admin roles remove rolename:" + rolename + " coursetype:" + coursetype, LogLvl.Title);
+        Logger.log("S_Admin - roles remove", event.getUser().getName() + " executed /admin roles remove rolename:" + rolename + " coursetype:" + coursetype, LogLvl.command);
 
         if (roleIDtodelete == 1173317439761678339L || roleIDtodelete == 1173303775407116288L) {
             event.reply(":x:   you can't delete the role of the Bot or [@]everyone").queue();
@@ -256,7 +256,7 @@ public class S_Admin {
         User eventUser = event.getUser();
         Boolean eventOption = event.getOption("confirme").getAsBoolean();
 
-        Logger.log("S_Admin - roles removeall", eventUser.getName() + " executed /admin roles removall confirme:" + eventOption, LogLvl.Title);
+        Logger.log("S_Admin - roles removeall", eventUser.getName() + " executed /admin roles removall confirme:" + eventOption, LogLvl.command);
         
         if (eventOption) {
             List<net.dv8tion.jda.api.entities.Role> allServerRoles = event.getGuild().getRoles();
@@ -295,7 +295,7 @@ public class S_Admin {
         MessageChannelUnion eventChannel = event.getChannel();
         Map<String, Map<String, Long>> coursemap = CJson.getcoursemap();
 
-        Logger.log("S_Admin - roles removeallcourses", eventUser.getAsMention() + " executed /admin roles removeallcourses confirme:" + event.getOption("confirme").getAsBoolean(), LogLvl.Title);
+        Logger.log("S_Admin - roles removeallcourses", eventUser.getAsMention() + " executed '/admin roles removeallcourses confirme:" + event.getOption("confirme").getAsBoolean() + "'", LogLvl.command);
 
         if (eventOption) {
             AtomicInteger allCourseRoles = new AtomicInteger(0);
@@ -342,7 +342,7 @@ public class S_Admin {
         Boolean eventOption = event.getOption("confirme").getAsBoolean();
         MessageChannelUnion eventChannel = event.getChannel();
 
-        Logger.log("S_Admin - bot updatecommands", eventUser.getName() + " executed '/admin bot updatecommands:" + eventOption, LogLvl.Title);
+        Logger.log("S_Admin - bot updatecommands", eventUser.getName() + " executed '/admin bot updatecommands:" + eventOption, LogLvl.command);
 
         if (eventOption) {
             jda.updateCommands().queue(
@@ -369,7 +369,7 @@ public class S_Admin {
         Boolean eventOption = event.getOption("confirme").getAsBoolean();
         MessageChannelUnion eventChannel = event.getChannel();
 
-        Logger.log("S_Admin - bot", eventUser.getName() + " executed '/admin bot shutdown confirme:" + eventOption + "'", LogLvl.Title);
+        Logger.log("S_Admin - bot", eventUser.getName() + " executed '/admin bot shutdown confirme:" + eventOption + "'", LogLvl.command);
 
         if (eventOption) {
             Logger.log("Shutting Bot down ...", eventUser.getName() + " is shutting down the bot", LogLvl.critical);
@@ -395,7 +395,7 @@ public class S_Admin {
         User eventUser = event.getUser();
         List<OptionMapping> eventOptionList = event.getOptions();
         if (eventOptionList.isEmpty()) {
-            Logger.log("S_Admin - msapi_reauthorize", eventUser.getName() + " executed '/admin msapi reauthorize' to reregister the account", LogLvl.moderate);
+            Logger.log("S_Admin - msapi_reauthorize", eventUser.getName() + " executed '/admin msapi reauthorize' to reregister the account", LogLvl.command);
             String authurl = MsAuth.getAuthurl();
             event.reply("Klick the button down below, to register with 'gbetododc@outlook.de'")
                 .addActionRow(
@@ -404,7 +404,7 @@ public class S_Admin {
                 .queue();
         } else {
             // String eventOption = event.getOption("authcode").getAsString()
-            Logger.log("S_Admin - msapi_reauthorize", eventUser.getName() + " executed '/admin msapi reauthorize' to enter the authcode", LogLvl.moderate);
+            Logger.log("S_Admin - msapi_reauthorize", eventUser.getName() + " executed '/admin msapi reauthorize' to enter the authcode", LogLvl.command);
             String authcode = event.getOption("authcode").getAsString();
             if (authcode != null) {
                 MsAuth.tokenAuthcode(authcode, success -> {
@@ -412,7 +412,7 @@ public class S_Admin {
                         Logger.log("S_Admin - msapi_reauthorize", eventUser.getName() + " successfully reregeristed the account and got a new token set", LogLvl.normale);
                         eventChannel.sendMessage(":white_check_mark:   " + eventUser.getAsMention() + " successfull token request from the new account").queue();
                     } else if (!success) {
-                        Logger.log("S_Admin - msapi_reauthorize", eventUser.getName() + " failed the reregistration with the new accound and couldn't get a new token set", LogLvl.critical);
+                        Logger.log("S_Admin - msapi_reauthorize", eventUser.getName() + " failed the reregistration with the new accound and couldn't get a new token set", LogLvl.moderate);
                         eventChannel.sendMessage(":x:   " + eventUser.getAsMention() + " failed the token request from the new account").queue();
                     }
                 });
@@ -423,20 +423,32 @@ public class S_Admin {
     private static void msapi_refreshtoken(SlashCommandInteractionEvent event) {
         MessageChannelUnion eventChannel = event.getChannel();
         User eventUser = event.getUser();
-        Logger.log("S_Admin - msapi_refreshtoken", eventUser.getName() + " executed '/admin msapi refreshtoken'", LogLvl.normale);
+        Logger.log("S_Admin - msapi_refreshtoken", eventUser.getName() + " executed '/admin msapi refreshtoken'", LogLvl.command);
         MsAuth.tokenRT(success -> {
             if (success) {
                 Logger.log("S_Admin - msapi_refreshtoken", eventUser.getName() + " successfully refresh the token via RFToken", LogLvl.normale);
                 eventChannel.sendMessage(":white_check_mark:   " + eventUser.getAsMention() + " recieved a new token set via the RFToken").queue();
             } else if (!success) {
-                Logger.log("S_Admin - msapi_refreshtoken", eventUser.getName() + " failed to refresh the token via RFToken", LogLvl.critical);
+                Logger.log("S_Admin - msapi_refreshtoken", eventUser.getName() + " failed to refresh the token via RFToken", LogLvl.moderate);
                 eventChannel.sendMessage(":x:     " + eventUser.getAsMention() + " failed to recieve a new token set via the RFToken").queue();
             }
         });
-        event.reply("queued refreshing process").queue();
+        event.reply("queued").queue();
     }
     private static void msapi_refreshtodo(SlashCommandInteractionEvent event) {
-        MsGraph.refreshToDoList();
-        event.reply("null").queue();
+        MessageChannelUnion eventChannel = event.getChannel();
+        User eventUser = event.getUser();
+        Logger.log("S_Admin - msapi_refrehtodo", eventUser.getName() + " executed '/admin mspai refreshtodo'", LogLvl.normale);
+
+        MsGraph.refreshToDoList(success -> {
+            if (success) {
+                Logger.log("S_Admin - msapi_refrehtodo", eventUser.getName() + " refreshed the ToDoHW List successfully", LogLvl.normale);
+                eventChannel.sendMessage(":white_check_mark:     " + eventUser.getAsMention() + " refeshed the ToDo Homework list successfully").queue();
+            } else if (!success) {
+                Logger.log("S_Admin - msapi_refrehtodo", eventUser.getName() + " failed to refreh to ToDoHW List", LogLvl.moderate);
+                eventChannel.sendMessage(":x:     " + eventUser.getAsMention() + " failed to refresh the ToDo Homework list").queue();
+            }
+        });
+        event.reply("queued").queue();
     }
 }

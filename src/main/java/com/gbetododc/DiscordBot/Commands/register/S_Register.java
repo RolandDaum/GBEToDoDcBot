@@ -20,7 +20,7 @@ public class S_Register {
         User eventUser = event.getUser();
         MessageChannelUnion eventChannel = event.getChannel();
         AtomicInteger amountofCoursestoAdd = new AtomicInteger(eventOptionList.size());
-        Logger.log("S_Register", eventUser.getName() + " executet '/register' with the following options: " + eventOptionList, LogLvl.Title);
+        Logger.log("S_Register", eventUser.getName() + " executed '/register' with the following options: " + eventOptionList, LogLvl.command);
 
         removeAllUserCourseRoles(eventUser, event, () -> {
             Logger.log("S_Register - removeAllUserCourseRoles", "removed all courseroles from " + eventUser.getName(), LogLvl.normale);
@@ -63,7 +63,7 @@ public class S_Register {
                                             Logger.log("S_Register - createNew", "added new created courserole '" + success.getName() + "' to '" + eventUser.getName() + "'", LogLvl.normale);
                                             if (amountofCoursestoAdd.get() == 0) {
                                                 Logger.log("S_Register - createNew", "finished creating/adding all roles to '" + eventUser.getName()+ "'", LogLvl.Title);
-                                                eventChannel.sendMessage(":white_check_mark:   " + eventUser.getAsMention() + " assined all roles to you").queue();
+                                                eventChannel.sendMessage(":white_check_mark:   " + eventUser.getAsMention() + " assigned all roles to you").queue();
                                             }
                                         }
                                     );
@@ -80,7 +80,7 @@ public class S_Register {
             }
         });
 
-        event.reply("Queued roles to be added to you.").queue();
+        event.reply("queued").queue();
     }
 
     private static void removeAllUserCourseRoles(User eventUser, SlashCommandInteractionEvent event, Runnable successfullyRemovedAllCourseroles) {
