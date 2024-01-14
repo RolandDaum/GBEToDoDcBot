@@ -1,10 +1,15 @@
 package com.gbetododc.MSAuthGraph;
 
+import java.net.http.HttpResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.function.Consumer;
 
 import com.gbetododc.MSAuthGraph.MSenvJson.MSenv;
+
+import kong.unirest.JsonNode;
+import kong.unirest.Unirest;
 
 public class MsGraph {
     public static void refreshToDoList() {
@@ -12,7 +17,6 @@ public class MsGraph {
         if (msenvJson.equals(null)) {return;}
 
         String tkexpString = msenvJson.getValues().getExpiryDate();
-        System.out.println(tkexpString);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date tkexpDate;
         try {
@@ -20,8 +24,7 @@ public class MsGraph {
         } catch (ParseException e) {return;}
 
         Date currentDate = new Date();
-        System.out.println(tkexpDate.getTime() - currentDate.getTime());
-        if ((tkexpDate.getTime() - currentDate.getTime()) <= 30000) {
+        if ((tkexpDate.getTime() - currentDate.getTime()) <= 30000) { // min 30 sec until expirering
             System.out.println("token will/is expire/d, requesting new one");
             MsAuth.tokenRT(success -> {
                 if (success) {
@@ -30,12 +33,16 @@ public class MsGraph {
                 } else {
                     System.out.println("could not refresh the token");
                 }
-
             });
 
         } else {
-            System.out.println("token will last some more time");
-            // TODO: MSGraph API Unirest
+            kong.unirest.HttpResponse<String> response = 
+                Unirest.get(msenvJson.getReqCredentials().getUrl_graph() + "todo/lists/" + msenvJson.getReqCredentials().getToDoListID() + "/tasks?$filter=status ne 'completed'") // https://learn.microsoft.com/en-us/graph/query-parameters
+                    .header("Authorization", (msenvJson.getValues().getTokenType() + " " + msenvJson.getValues().getToken()).toString())
+                    .asString();
+        
+            System.out.println(response.getBody());        
         }
     }
+
 }

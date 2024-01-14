@@ -136,18 +136,24 @@ public class MsAuth {
                 .field("scope", scopes)
                 .asJsonAsync(
                     response -> {
-                        Boolean success;
                         Integer statuscode = response.getStatus();
                         String respBody = response.getBody().toString();
                         switch (statuscode) {
                             case 200:
-                                saveTKresponse(respBody);
-                                success = true;
-                                callback.accept(success);
+                            MSenvJson.saveMSenv(saveTKresponse(respBody), saved -> {
+                                Boolean success;
+                                if (saved) {
+                                    success = true;
+                                    callback.accept(success);
+                                } else if (!saved) {
+                                    success = false;
+                                    callback.accept(success);
+                                } 
+                            });
                                 break;
                         
                             case 400:
-                                success = false;
+                                Boolean success = false;
                                 callback.accept(success);
                                 TKerrorResp errorResp = getTKerrorResp(respBody);
                                 Logger.log(
@@ -174,26 +180,33 @@ public class MsAuth {
         }
     }
 
-    public static void saveTKresponse(String tkrespString) {
+    // /**
+    // * Get a MSenv obj with the new parameters
+    // *
+    // * @param authcode Authcode as a String
+    // * @return 
+    // */
+    public static MSenv saveTKresponse(String tkrespString) {
         TKresp tkresp = new Gson().fromJson(tkrespString, TKresp.class);
         MSenv msenvJson = MSenvJson.getMSenv();
-        if (msenvJson.equals(null)) {
-            return;
-        }
+        if (msenvJson.equals(null)) {return null;}
+
+        msenvJson.getValues().setTokenType(tkresp.getTokenType());
         msenvJson.getValues().setToken(tkresp.getAccessToken());
         msenvJson.getValues().setRFToken(tkresp.getRefreshToken());
         msenvJson.getValues().setExpiryDate((new Timestamp(System.currentTimeMillis() + (tkresp.getExpiresIn()*1000))).toString());
 
-        MSenvJson.saveMSenv(msenvJson);
+        return msenvJson;
     }
     public class TKresp {
-        // private String token_type;
+        private String token_type;
         // private String scope;
         private Integer expires_in;
         // private Integer ext_expires_in;
         private String access_token;
         private String refresh_token;
 
+        public String getTokenType() {return this.token_type;}
         public Integer getExpiresIn() {return this.expires_in;}
         public String getAccessToken() {return this.access_token;}
         public String getRefreshToken() {return this.refresh_token;}

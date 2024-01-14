@@ -4,6 +4,8 @@ import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.function.Consumer;
+
 import com.gbetododc.DiscordBot.DiscordBot;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
@@ -23,14 +25,19 @@ public class MSenvJson {
             return null;
         }
     }
-    public static Boolean saveMSenv(MSenv Gjson) {
+    public static void saveMSenv(MSenv Gjson, Consumer<Boolean> callback) {
         try (FileWriter filewriter = new FileWriter(jsonFilePathString)) {
             Gson gson = new Gson();
             filewriter.write(gson.toJson(Gjson));
             filewriter.close();
-            return true;
+
+            Boolean saved = true;
+            callback.accept(saved);
         }
-        catch (Throwable e) {return false;}
+        catch (Throwable e) {
+            Boolean saved = false;
+            callback.accept(saved);
+        }
     }
 
     public class MSenv {
@@ -41,10 +48,14 @@ public class MSenvJson {
         public ReqCredentials getReqCredentials() {return ReqCredentials;}
     }
     class Values {
+        private String TokenType;
         private String Token;
         private String RFToken;
         private String ExpiryDate;
     
+        public String getTokenType() {return TokenType;}
+        public void setTokenType(String TokenType) {this.TokenType = TokenType;}
+        
         public String getToken() {return Token;}
         public void setToken(String TOKEN) {this.Token = TOKEN;}
     
