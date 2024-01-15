@@ -438,7 +438,7 @@ public class S_Admin {
     private static void msapi_refreshtodo(SlashCommandInteractionEvent event) {
         MessageChannelUnion eventChannel = event.getChannel();
         User eventUser = event.getUser();
-        Logger.log("S_Admin - msapi_refrehtodo", eventUser.getName() + " executed '/admin mspai refreshtodo'", LogLvl.normale);
+        Logger.log("S_Admin - msapi_refrehtodo", eventUser.getName() + " executed '/admin mspai refreshtodo'", LogLvl.command);
 
         MsGraph.refreshToDoList(success -> {
             if (success) {

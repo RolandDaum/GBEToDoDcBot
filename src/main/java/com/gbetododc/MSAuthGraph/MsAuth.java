@@ -227,8 +227,7 @@ public class MsAuth {
      * @return TKerroResp
      */
     public static TKerrorResp getTKerrorResp(String errorResp) {
-        Gson gson = new Gson();
-        TKerrorResp tkerrorresp = gson.fromJson(errorResp, TKerrorResp.class);
+        TKerrorResp tkerrorresp = new Gson().fromJson(errorResp, TKerrorResp.class);
         return tkerrorresp;
     }
     public class TKerrorResp {

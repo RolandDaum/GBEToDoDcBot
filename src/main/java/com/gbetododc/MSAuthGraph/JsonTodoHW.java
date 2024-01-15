@@ -29,7 +29,7 @@ public class JsonTodoHW {
 
     public static Boolean saveToDoHW(ToDoHWTasks todohwtasks) {
         try (FileWriter filewriter = new FileWriter(jsonFilePathString)) {
-            filewriter.write(new Gson().toJson(todohwtasks));
+            filewriter.write(new Gson().toJson(todohwtasks, ToDoHWTasks.class));
             filewriter.close();
         
             return true;
