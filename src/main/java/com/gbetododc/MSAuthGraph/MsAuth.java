@@ -122,8 +122,8 @@ public class MsAuth {
     public static void tokenRT(Consumer<Boolean> callback) {
         MSenv msenvJson = JsonMSenv.getMSenv();
         if (msenvJson == null) {
-            Boolean success = false;
-            callback.accept(success);
+            Boolean successTRF = false;
+            callback.accept(successTRF);
             return;
         }
         List<String> scopeList = msenvJson.getReqCredentials().getScopes();
@@ -151,20 +151,16 @@ public class MsAuth {
                         switch (statuscode) {
                             case 200:
                                 JsonMSenv.saveMSenv(aplyTKresp(respBody), saved -> {
-                                    Boolean success;
                                     if (saved) {
-                                        success = true;
-                                        callback.accept(success);
+                                        callback.accept(true);
                                     } else if (!saved) {
-                                        success = false;
-                                        callback.accept(success);
+                                        callback.accept(true);
                                     } 
                                 });
                                 break;
                         
                             case 400:
-                                Boolean success = false;
-                                callback.accept(success);
+                                callback.accept(false);
                                 TKerrorResp errorResp = getTKerrorResp(respBody);
                                 Logger.log(
                                     "MsAuth - RFTokenRq", 
@@ -176,8 +172,7 @@ public class MsAuth {
                                 break;
 
                             default:
-                                success = false;
-                                callback.accept(success);
+                                callback.accept(false);
                                 Logger.log("MsAuth - TokenReq with RF Token", "Error " + statuscode + "\n" + respBody, LogLvl.critical);
                                 break;
                         }

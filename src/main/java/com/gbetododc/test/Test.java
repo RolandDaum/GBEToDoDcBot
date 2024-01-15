@@ -4,8 +4,8 @@ import java.util.function.Consumer;
 
 public class Test {
         public static void main(String[] args) {
-            test(cbString -> {
-                System.out.println(cbString);
+            test(Boolean -> {
+                System.out.println(Boolean);
             });
         }
         public static void test(Consumer<String> callback) {

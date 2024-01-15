@@ -19,7 +19,7 @@ import kong.unirest.Unirest;
 public class MsGraph {
     /**
      * Refreshing the todoHW.json file
-     * @param callback as Boolean success
+     * @param Boolean callback
      */
     public static void refreshToDoList(Consumer<Boolean> callback) {
         MSenv msenvJson = JsonMSenv.getMSenv();
@@ -34,61 +34,54 @@ public class MsGraph {
 
         Date currentDate = new Date();
         if ((tkexpDate.getTime() - currentDate.getTime()) <= 30000) { // min 30 sec until expirering
-            MsAuth.tokenRT(success -> {
-                if (success) {
-                    refreshToDoList(empty -> {});
-                } else if (!success) {
-                    callback.accept(success);   
+            MsAuth.tokenRT(successTRF -> {
+                if (successTRF) {
+                    Logger.log("MsGraph - refreshToDoList", "restarting ToDo refresh after successfully refreshing old token", LogLvl.normale);
+                    MsGraph.refreshToDoList(empty -> {
+                        callback.accept(empty);
+                    });
+                } else if (!successTRF) {
+                    callback.accept(false);   
                 }
             });
 
         } else {
-            kong.unirest.HttpResponse<String>  response;
-            try {
-                response = 
-                Unirest.get(msenvJson.getReqCredentials().getUrl_graph() + "todo/lists/" + msenvJson.getReqCredentials().getToDoListID() + "/tasks?$filter=status ne 'completed'") // https://learn.microsoft.com/en-us/graph/query-parameters
+            kong.unirest.HttpResponse<String> response = Unirest.get(msenvJson.getReqCredentials().getUrl_graph() + "todo/lists/" + msenvJson.getReqCredentials().getToDoListID() + "/tasks?$filter=status ne 'completed'") // https://learn.microsoft.com/en-us/graph/query-parameters
                     .header("Authorization", (msenvJson.getValues().getTokenType() + " " + msenvJson.getValues().getToken()).toString())
                     .asString();
-            } catch (Throwable e) {
-                System.out.println(e);
-                Boolean success = false;
-                callback.accept(success);
-                return;
-            }
 
-
-            Integer responseCode = response.getStatus();
             String responseBody = response.getBody().toString();
-            System.out.println(responseCode);
+            Integer responseCode = response.getStatus();
+            
             switch (responseCode) {
                 case 200:
                     ToDoHWTasks todohwtasks = new Gson().fromJson(responseBody, ToDoHWTasks.class);
                     Boolean savedToDoHWtasks = JsonTodoHW.saveToDoHW(todohwtasks);
-                    if (savedToDoHWtasks) {
-                        Boolean success = true;
-                        callback.accept(success);
-                    } else if (!savedToDoHWtasks) {
-                        Boolean success = false;
-                        callback.accept(success);   
-                    }
+                    callback.accept(savedToDoHWtasks);
                     break;
                 case 400:
-                // TODO hier ist ein erro oder so
-                System.out.pritnln()
-                    Gson gson = new Gson();
-                    GraphErrorResp errorResp = gson.fromJson(tkexpString, GraphErrorResp.class);
-                    // Logger.log(
-                    //     "MsAuth - RFTokenRq", 
-                    //     errorResp.getError().getInnerError().getDate() + " " + errorResp.getError().getCode() + "\n" + 
-                    //     errorResp.getError().getMessage(),
-                    //     LogLvl.critical
-                    // );
-                    Boolean success = false;
-                    callback.accept(success);
+                    GraphErrorResp errorResp = new Gson().fromJson(responseBody, GraphErrorResp.class);
+                    Logger.log(
+                        "MsAuth - RFTokenRq", 
+                        errorResp.getError().getInnerError().getDate() + " " + errorResp.getError().getCode() + " " + errorResp.getError().getMessage(),
+                        LogLvl.critical
+                    );
+                    callback.accept(false);
+                    break;
+                case 401:
+                    Logger.log("MsGraph - refreshToDoList", "refreshing Token set because of an invalid token", LogLvl.normale);
+                    MsAuth.tokenRT(success -> {
+                        if (success) {
+                            refreshToDoList(successToDoRF -> {
+                                callback.accept(successToDoRF);
+                            });
+                        } else if (!success) {
+                            callback.accept(false);
+                        }
+                    });
                     break;
                 default:
-                    success = false;
-                    callback.accept(success);
+                    callback.accept(false);
                     Logger.log("MsAuth - TokenReq with RF Token", "Error " + responseCode + "\n" + responseBody, LogLvl.critical);
                     break;
             }
@@ -150,4 +143,5 @@ public class MsGraph {
         public String getRequestId() {return this.requestid;}
         public String getClientRequestId() {return this.clientrequestid;}
     }
+
 }
