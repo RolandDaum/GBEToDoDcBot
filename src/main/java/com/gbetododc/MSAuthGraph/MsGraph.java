@@ -52,6 +52,7 @@ public class MsGraph {
 
             String responseBody = response.getBody().toString();
             Integer responseCode = response.getStatus();
+            System.out.println(responseBody);
             
             switch (responseCode) {
                 case 200:
@@ -60,9 +61,10 @@ public class MsGraph {
                     callback.accept(savedToDoHWtasks);
                     break;
                 case 400:
+                    System.out.println(responseBody);
                     GraphErrorResp errorResp = new Gson().fromJson(responseBody, GraphErrorResp.class);
                     Logger.log(
-                        "MsAuth - RFTokenRq", 
+                        "MsAuth - refreshToDoList", 
                         errorResp.getError().getInnerError().getDate() + " " + errorResp.getError().getCode() + " " + errorResp.getError().getMessage(),
                         LogLvl.critical
                     );

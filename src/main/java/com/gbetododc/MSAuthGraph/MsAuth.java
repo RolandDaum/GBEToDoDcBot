@@ -92,7 +92,7 @@ public class MsAuth {
                                 Boolean success = false;
                                 callback.accept(success);
                                 Logger.log(
-                                    "MsAuth - RFTokenRq", 
+                                    "MsAuth - InitTokenReq", 
                                     errorResp.getTimestamp() + " " + errorResp.getError() + "\n" + 
                                     errorResp.getErrorDescription() + "\n" +
                                     errorResp.getErrorUri(), 
