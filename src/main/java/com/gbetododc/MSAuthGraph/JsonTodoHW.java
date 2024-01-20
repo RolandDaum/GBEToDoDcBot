@@ -3,8 +3,6 @@ package com.gbetododc.MSAuthGraph;
 import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.function.Consumer;
-
 import com.gbetododc.DiscordBot.DiscordBot;
 import com.gbetododc.MSAuthGraph.MsGraph.ToDoHWTasks;
 import com.gbetododc.System.Logger;

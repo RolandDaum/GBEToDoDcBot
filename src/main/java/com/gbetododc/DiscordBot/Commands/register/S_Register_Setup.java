@@ -6,8 +6,6 @@ import com.gbetododc.DiscordBot.DiscordBot;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
 import io.github.cdimascio.dotenv.Dotenv;
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
