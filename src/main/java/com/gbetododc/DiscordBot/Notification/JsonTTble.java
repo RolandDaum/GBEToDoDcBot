@@ -2,6 +2,9 @@ package com.gbetododc.DiscordBot.Notification;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import com.gbetododc.DiscordBot.DiscordBot;
 import com.gbetododc.System.Logger;
@@ -31,19 +34,19 @@ public class JsonTTble {
         private TTble_Timetable Timetable; 
         private TTble_Bände Bände;
 
-        private TTble_Timetable getTimetable() {return Timetable;}
-        private TTble_Bände getBände() {return Bände;}
+        public TTble_Timetable getTimetable() {return Timetable;}
+        public TTble_Bände getBände() {return Bände;}
 
         /**
          * @param weekday Integer from 1-5 [1,2,3,4,5]
          * @param period Integer from 1-11 [1,2,3,4,5,6,7,8,9,10,11]
          * @return List<String> with the coresponding of the courses from the period of the weekday
          */
-        public List<String> getCourses(Integer weekday, Integer period) {
+        private List<String> getCourses(Integer weekday, Integer period) {
             return JsonTTble.getTTble().getTimetable().getWeekday(weekday).getPeriod(period);
         }
     }
-    private static class TTble_Timetable {
+    public static class TTble_Timetable {
         private TTble_Day Montag;
         private TTble_Day Dienstag;
         private TTble_Day Mittwoch;
@@ -54,7 +57,7 @@ public class JsonTTble {
          * @param weekday Integer from 1 to 5 [1,2,3,4,5]
          * @return TTble_Day
          */
-        private TTble_Day getWeekday(Integer weekday) {
+        public TTble_Day getWeekday(Integer weekday) {
             switch (weekday) {
                 case 1:
                     return Montag;
@@ -77,7 +80,7 @@ public class JsonTTble {
         // public TTble_Day getFreitag() {return Freitag;}
 
     } 
-    private static class TTble_Day {
+    public static class TTble_Day {
         @SerializedName("7:40")
         private String _7_40;
         @SerializedName("8:30")
@@ -103,38 +106,93 @@ public class JsonTTble {
 
         /**
          * @param period [1,2,3,4,5,6,7,8,9,10,11]
-         * @return List<String> with the coresponding courses of ´the period
+         * @return List<String> with the coresponding courses of the period
          */
-        private List<String> getPeriod(Integer period) {
-            switch (period) {
-                case 1:
-                    return JsonTTble.getTTble().getBände().getBand(_7_40);
-                case 2:
-                    return JsonTTble.getTTble().getBände().getBand(_8_30);
-                case 3:
-                    return JsonTTble.getTTble().getBände().getBand(_9_35);
-                case 4:
-                    return JsonTTble.getTTble().getBände().getBand(_10_25);
-                case 5:
-                    return JsonTTble.getTTble().getBände().getBand(_11_25);
-                case 6:
-                    return JsonTTble.getTTble().getBände().getBand(_12_15);
-                case 7:
-                    return JsonTTble.getTTble().getBände().getBand(_13_05);
-                case 8:
-                    return JsonTTble.getTTble().getBände().getBand(_13_50);
-                case 9:
-                    return JsonTTble.getTTble().getBände().getBand(_14_35);
-                case 10:
-                    return JsonTTble.getTTble().getBände().getBand(_15_25);
-                case 11:
-                    return JsonTTble.getTTble().getBände().getBand(_16_20);
+        // public List<String> getPeriodByInteger(Integer period) {
+        //     switch (period) {
+        //         case 1:
+        //             return JsonTTble.getTTble().getBände().getBand(_7_40);
+        //         case 2:
+        //             return JsonTTble.getTTble().getBände().getBand(_8_30);
+        //         case 3:
+        //             return JsonTTble.getTTble().getBände().getBand(_9_35);
+        //         case 4:
+        //             return JsonTTble.getTTble().getBände().getBand(_10_25);
+        //         case 5:
+        //             return JsonTTble.getTTble().getBände().getBand(_11_25);
+        //         case 6:
+        //             return JsonTTble.getTTble().getBände().getBand(_12_15);
+        //         case 7:
+        //             return JsonTTble.getTTble().getBände().getBand(_13_05);
+        //         case 8:
+        //             return JsonTTble.getTTble().getBände().getBand(_13_50);
+        //         case 9:
+        //             return JsonTTble.getTTble().getBände().getBand(_14_35);
+        //         case 10:
+        //             return JsonTTble.getTTble().getBände().getBand(_15_25);
+        //         case 11:
+        //             return JsonTTble.getTTble().getBände().getBand(_16_20);
+        //         default:
+        //             Logger.log("JsonTTble - getPeriod()", "Invalid Period '" + period + "'", LogLvl.moderate);
+        //             return null;
+        //     }
+        // }
+
+        /**
+         * @param localtime [LocalTime.of(7, 40), LocalTime.of(8,30), LocalTime.of(9,35), LocalTime.of(10,25), LocalTime.of(11,25), LocalTime.of(12,15), LocalTime.of(13,5), LocalTime.of(13,50), LocalTime.of(14,35), LocalTime.of(15,25), LocalTime.of(16,20)]
+         * @return List<String> with the coresponding courses of the period
+         */
+        public List<String> getPeriodByLocalTime(LocalTime localtime) {
+            List<String> BandList;
+            switch (localtime.toString()) {
+                case "07:40":
+                    BandList = JsonTTble.getTTble().getBände().getBand(_7_40);
+                    if (BandList == null) {return new ArrayList<>(Arrays.asList(_7_40));} 
+                    else {return BandList;}
+                case "08:30":
+                    BandList = JsonTTble.getTTble().getBände().getBand(_8_30);
+                    if (BandList == null) {return new ArrayList<>(Arrays.asList(_8_30));} 
+                    else {return BandList;}
+                case "09:35":
+                    BandList = JsonTTble.getTTble().getBände().getBand(_9_35);
+                    if (BandList == null) {return new ArrayList<>(Arrays.asList(_9_35));} 
+                    else {return BandList;}
+                case "10:25":
+                    BandList = JsonTTble.getTTble().getBände().getBand(_10_25);
+                    if (BandList == null) {return new ArrayList<>(Arrays.asList(_10_25));} 
+                    else {return BandList;}
+                case "11:25":
+                    BandList = JsonTTble.getTTble().getBände().getBand(_11_25);
+                    if (BandList == null) {return new ArrayList<>(Arrays.asList(_11_25));} 
+                    else {return BandList;}
+                case "12:15":
+                    BandList = JsonTTble.getTTble().getBände().getBand(_12_15);
+                    if (BandList == null) {return new ArrayList<>(Arrays.asList(_12_15));} 
+                    else {return BandList;}
+                case "13:05":
+                    BandList = JsonTTble.getTTble().getBände().getBand(_13_05);
+                    if (BandList == null) {return new ArrayList<>(Arrays.asList(_7_40));} 
+                    else {return BandList;}
+                case "13:50":
+                    BandList = JsonTTble.getTTble().getBände().getBand(_13_50);
+                    if (BandList == null) {return new ArrayList<>(Arrays.asList(_13_50));} 
+                    else {return BandList;}
+                case "14:35":
+                    BandList = JsonTTble.getTTble().getBände().getBand(_14_35);
+                    if (BandList == null) {return new ArrayList<>(Arrays.asList(_14_35));} 
+                    else {return BandList;}
+                case "15:25":
+                    BandList = JsonTTble.getTTble().getBände().getBand(_15_25);
+                    if (BandList == null) {return new ArrayList<>(Arrays.asList(_15_25));} 
+                    else {return BandList;}
+                case "16:20":
+                    BandList = JsonTTble.getTTble().getBände().getBand(_16_20);
+                    if (BandList == null) {return new ArrayList<>(Arrays.asList(_16_20));} 
+                    else {return BandList;}
                 default:
-                    Logger.log("JsonTTble - getPeriod()", "Invalid Period '" + period + "'", LogLvl.moderate);
                     return null;
             }
         }
-
         // public String get_7_40() {return _7_40;}
         // public String get_8_30() {return _8_30;}
         // public String get_9_35() {return _9_35;}

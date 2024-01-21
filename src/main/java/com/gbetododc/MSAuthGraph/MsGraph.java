@@ -87,11 +87,11 @@ public class MsGraph {
 
     // Class Structure for todo/lists/tasks response
     public class ToDoHWTasks {
-        private List<Task> value;
+        private List<ToDoHW_Task> value;
 
-        public List<Task> getValue() {return value;}
+        public List<ToDoHW_Task> getValue() {return value;}
     }
-    private class Task {
+    public class ToDoHW_Task {
         // private String importance;
         // private String status;
         private String title;
@@ -99,12 +99,12 @@ public class MsGraph {
         // private String lastModifiedDateTime;
         // private Boolean hasAttachments;
         // private String id;
-        private dueDateTime dueDateTime;
+        private ToDoHW_dueDateTime dueDateTime;
 
         public String getTitle() {return title;}
-        public dueDateTime getDueDateTime() {return dueDateTime;}
+        public ToDoHW_dueDateTime getDueDateTime() {return dueDateTime;}
     }
-    private class dueDateTime {
+    public class ToDoHW_dueDateTime {
         private String dateTime;
         private String timeZone;
 
