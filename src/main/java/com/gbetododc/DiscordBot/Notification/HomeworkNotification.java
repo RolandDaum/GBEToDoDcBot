@@ -26,6 +26,7 @@ public class HomeworkNotification {
                 MsGraph.refreshToDoList(success -> {
                     if (success) {
                         // Gucken, ob es überhaupt Aufgaben gibt, die heute fällig sind.
+                        // TODO: Was passiert, wenn es keien Aufgaben gibt?
                         List<ToDoHW_Task> todoHWTasksList = JsonTodoHW.getToDoHW().getValue();
                         for (ToDoHW_Task toDoHW_Task : todoHWTasksList) {
                             // Guckt, ob das Fälligkeitsdatum der Aufgabe am Heutigen Tag ist.

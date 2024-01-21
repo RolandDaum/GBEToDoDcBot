@@ -1,6 +1,7 @@
 package com.gbetododc.DiscordBot;
 
 import com.gbetododc.DiscordBot.Commands.BotCommand;
+import com.gbetododc.DiscordBot.Notification.ThreadHWNotification;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
 
@@ -36,6 +37,8 @@ public class DiscordBot extends ListenerAdapter {
         DiscordBot.MAIINSERVERGUILD = jda.getGuildById(dotenv.get("MAINSERVERGUILDID"));
         Logger.log("DiscordBot - build", "Connected the bot successfully", LogLvl.Title);
 
+        // Starting the notifier
+        new ThreadHWNotification().start();
         
     }
 }

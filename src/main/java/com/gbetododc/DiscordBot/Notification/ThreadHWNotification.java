@@ -19,7 +19,7 @@ public class ThreadHWNotification extends Thread {
             LocalTime.of(13,50),
             LocalTime.of(14,35),
             LocalTime.of(15,25),
-            LocalTime.of(16,20)
+            LocalTime.of(16,10)
             // Time.valueOf("07:40:00"),
             // Time.valueOf("08:30:00"),
             // Time.valueOf("09:35:00"),
@@ -33,7 +33,9 @@ public class ThreadHWNotification extends Thread {
             // Time.valueOf("16:20:00")
         )
     );
-    public static void main(String[] args) {new ThreadHWNotification().start();}
+    public static void main(String[] args) {
+        new ThreadHWNotification().start();
+    }
     @Override
     public void run() {     
         while (true) {
@@ -42,8 +44,19 @@ public class ThreadHWNotification extends Thread {
             LocalTime wakeUpTime = getNextNotificationTime(currentTime);
 
             System.out.println("Thread woke up and will sleep until: " + wakeUpTime);
-            Duration timetosleep = Duration.between(currentTime, wakeUpTime);
-            try {Thread.sleep(timetosleep);}
+
+            Duration timetosleep = Duration.ofDays(0);
+            if (currentTime.isBefore(wakeUpTime)) {
+                timetosleep = Duration.between(currentTime, wakeUpTime);
+            } else if (currentTime.isAfter(wakeUpTime)) {
+                timetosleep = Duration.between(
+                    currentTime, LocalTime.of(23, 59, 59)
+                    ).plus(
+                        Duration.between(LocalTime.of(0,0,0), wakeUpTime)
+                    );
+            }
+
+            try {Thread.sleep(timetosleep.toMillis());}
             catch (InterruptedException e) {e.printStackTrace();}
 
             HomeworkNotification.Notifie(wakeUpTime);
@@ -57,6 +70,6 @@ public class ThreadHWNotification extends Thread {
                 return localTime;
             }
         }
-        return null;
+        return PeriodStartTimes.getFirst();
     }
 }
