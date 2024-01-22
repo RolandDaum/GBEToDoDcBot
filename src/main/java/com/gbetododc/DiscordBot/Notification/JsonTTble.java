@@ -142,7 +142,7 @@ public class JsonTTble {
          * @param localtime [LocalTime.of(7, 40), LocalTime.of(8,30), LocalTime.of(9,35), LocalTime.of(10,25), LocalTime.of(11,25), LocalTime.of(12,15), LocalTime.of(13,5), LocalTime.of(13,50), LocalTime.of(14,35), LocalTime.of(15,25), LocalTime.of(16,20)]
          * @return List<String> with the coresponding courses of the period
          */
-        public List<String> getPeriodByLocalTime(LocalTime localtime) {
+        public List<String> getPeriodCpursesByLocalTime(LocalTime localtime) {
             List<String> BandList;
             switch (localtime.toString()) {
                 case "07:40":
@@ -171,7 +171,7 @@ public class JsonTTble {
                     else {return BandList;}
                 case "13:05":
                     BandList = JsonTTble.getTTble().getBände().getBand(_13_05);
-                    if (BandList == null) {return new ArrayList<>(Arrays.asList(_7_40));} 
+                    if (BandList == null) {return new ArrayList<>(Arrays.asList(_13_05));} 
                     else {return BandList;}
                 case "13:50":
                     BandList = JsonTTble.getTTble().getBände().getBand(_13_50);
@@ -205,7 +205,7 @@ public class JsonTTble {
         // public String get_15_25() {return _15_25;}
         // public String get_16_20() {return _16_20;}
     }
-    private static class TTble_Bände {
+    public static class TTble_Bände {
         private List<String> Bd1;
         private List<String> Bd2;
         private List<String> Bd3;
@@ -221,7 +221,10 @@ public class JsonTTble {
          * @param BandName [Bd1, Bd2, Bd3, Bd4, Bd5, Bd6, Bd7, Bd8, Bd9, Bd10]
          * @return List<String> with every course on the given band
          */
-        private List<String> getBand(String BandName) {
+        public List<String> getBand(String BandName) {
+            if (BandName == null) {
+                return null;
+            }
             switch (BandName) {
                 case "Bd1":
                     return this.Bd1;

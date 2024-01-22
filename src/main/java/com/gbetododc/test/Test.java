@@ -57,7 +57,10 @@ public class Test {
         )
     );
     public static void main(String[] args) {
-        System.out.println(PeriodStartTimes.get(0));
+        List<String> courses = JsonTTble.getTTble().getTimetable().getWeekday(1).getPeriodCpursesByLocalTime(LocalTime.of(13,5));
+
+        System.out.println(courses);
+        // System.out.println(PeriodStartTimes.get(0));
         // LocalTime currentTime = LocalTime.now();
         
         // // Einordnung beim Start, wo er sich selber gerade befindet

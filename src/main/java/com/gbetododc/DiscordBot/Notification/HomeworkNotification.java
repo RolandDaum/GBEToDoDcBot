@@ -20,7 +20,7 @@ public class HomeworkNotification {
         Integer weekday = LocalDate.now().getDayOfWeek().getValue();
         if (weekday < 6) {
             // Checken, ob es zur Zeit Kurse gibt
-            List<String> courses = JsonTTble.getTTble().getTimetable().getWeekday(weekday).getPeriodByLocalTime(notificationTime);
+            List<String> courses = JsonTTble.getTTble().getTimetable().getWeekday(weekday).getPeriodCpursesByLocalTime(notificationTime);
             if (courses != null) {
                 // ToDo List aktualisieren
                 MsGraph.refreshToDoList(success -> {
