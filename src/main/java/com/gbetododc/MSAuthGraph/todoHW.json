@@ -1,65 +1,23 @@
 {
   "value": [
     {
-      "title": "MA1 Rt: Aufgaben beenden",
+      "title": "MA1 Rt: Testaufgabe",
       "dueDateTime": {
-        "dateTime": "2024-01-23T00:00:00.0000000",
+        "dateTime": "2024-01-22T23:00:00.0000000",
         "timeZone": "UTC"
       }
     },
     {
-      "title": "pw2 Wm: Selber vervollständigen + Informieren, warum so viele Demos, was war mit den Treffen von AFD,CDU Politiker, Grund warum so viele Menschen auf die STraße gehen",
+      "title": "Test Aufgabe",
       "dueDateTime": {
-        "dateTime": "2024-01-24T00:00:00.0000000",
+        "dateTime": "2024-01-22T23:00:00.0000000",
         "timeZone": "UTC"
       }
     },
     {
-      "title": "en1 Hp: Apply Aristotle 5 act structure to \"pride\" (Explain how \"pride\" uses this Structure)",
+      "title": "ENG1 Hü: TEST",
       "dueDateTime": {
-        "dateTime": "2024-01-24T00:00:00.0000000",
-        "timeZone": "UTC"
-      }
-    },
-    {
-      "title": "re1 Ma: AB's beenden",
-      "dueDateTime": {
-        "dateTime": "2024-01-24T00:00:00.0000000",
-        "timeZone": "UTC"
-      }
-    },
-    {
-      "title": "ENG1 Hü: Wb p.106 ex.9f 'or' 9g; p.106-107 No.10",
-      "dueDateTime": {
-        "dateTime": "2024-01-22T00:00:00.0000000",
-        "timeZone": "UTC"
-      }
-    },
-    {
-      "title": "Ch1 Mm: AB 10 aufgabe 1 + 2",
-      "dueDateTime": {
-        "dateTime": "2024-01-22T00:00:00.0000000",
-        "timeZone": "UTC"
-      }
-    },
-    {
-      "title": "CH1 Mm: Arbeitsblatt Nr. 10 (Iserv). Stellung nehmen",
-      "dueDateTime": {
-        "dateTime": "2024-01-22T00:00:00.0000000",
-        "timeZone": "UTC"
-      }
-    },
-    {
-      "title": "de1 Wd: Effi Briest Ort etc. aufschreiben",
-      "dueDateTime": {
-        "dateTime": "2024-01-22T00:00:00.0000000",
-        "timeZone": "UTC"
-      }
-    },
-    {
-      "title": "de2 Bl: Der ewige Spießer lesen bis Zeugnisferien (Opfer) (Hurensohn) (Homofotze) (Nuttensohn)",
-      "dueDateTime": {
-        "dateTime": "2024-02-15T00:00:00.0000000",
+        "dateTime": "2024-01-22T23:00:00.0000000",
         "timeZone": "UTC"
       }
     }

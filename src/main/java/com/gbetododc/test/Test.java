@@ -1,14 +1,20 @@
 package com.gbetododc.Test;
 
+import java.security.Timestamp;
 import java.sql.Time;
 import java.time.DayOfWeek;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.gbetododc.DiscordBot.Notification.HomeworkNotification;
 import com.gbetododc.DiscordBot.Notification.JsonTTble;
 import com.gbetododc.DiscordBot.Notification.ThreadHWNotification;
 import com.gbetododc.DiscordBot.Notification.JsonTTble.TTble;
@@ -57,9 +63,24 @@ public class Test {
         )
     );
     public static void main(String[] args) {
-        List<String> courses = JsonTTble.getTTble().getTimetable().getWeekday(1).getPeriodCpursesByLocalTime(LocalTime.of(13,5));
+        // List<String> courses = JsonTTble.getTTble().getTimetable().getWeekday(1).getPeriodCpursesByLocalTime(LocalTime.of(13,5));
 
-        System.out.println(courses);
+
+        System.out.println(LocalDate.now());
+
+
+        String timestampString = "2024-01-22T23:00:00.0000000";
+        String pattern = "yyyy-MM-ddTHH:mm:ss.SSSSSSSS";
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+        LocalDateTime localDateTime = LocalDateTime.from(formatter.parse(timestampString));
+
+        System.out.println(localDateTime);
+            // HomeworkNotification.Notifie(LocalTime.of(12, 15));
+
+
+
+
         // System.out.println(PeriodStartTimes.get(0));
         // LocalTime currentTime = LocalTime.now();
         

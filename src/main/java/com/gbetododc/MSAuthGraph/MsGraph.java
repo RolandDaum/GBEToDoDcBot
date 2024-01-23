@@ -49,6 +49,7 @@ public class MsGraph {
 
             String responseBody = response.getBody().toString();
             Integer responseCode = response.getStatus();
+            System.out.println(responseBody);
             
             switch (responseCode) {
                 case 200:
