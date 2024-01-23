@@ -10,7 +10,6 @@ import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
-
 import kong.unirest.Unirest;
 
 public class MsGraph {
@@ -49,7 +48,6 @@ public class MsGraph {
 
             String responseBody = response.getBody().toString();
             Integer responseCode = response.getStatus();
-            System.out.println(responseBody);
             
             switch (responseCode) {
                 case 200:
@@ -86,6 +84,27 @@ public class MsGraph {
         }
     }
 
+    /**
+     * @param todohwtask takes a ToDoHW_Task Object and will patch it into the ToDo List
+     */
+    public static void updateTask(ToDoHW_Task todohwtask) {
+        MSenv msenvJson = JsonMSenv.getMSenv();
+        kong.unirest.HttpResponse<String> response = Unirest.patch(msenvJson.getReqCredentials().getUrl_graph() + "todo/lists/" + msenvJson.getReqCredentials().getToDoListID() + "/tasks/" + todohwtask.getId())
+            .header("Content-Type", "application/json")    
+            .header("Authorization", msenvJson.getValues().getTokenType() + " " + msenvJson.getValues().getToken())
+            .body(new Gson().toJson(todohwtask).toString())
+            .asString();
+
+        Integer responseCode = response.getStatus();
+        switch (responseCode) {
+            case 200:
+                Logger.log("MsGraph - updateTask", "Updated Task '" + todohwtask.getTitle() + "' successfully", LogLvl.normale);
+                break;
+            default:
+                Logger.log("MsGraph - updateTask", "Failed to update Task:\n" + response.getStatus() + "\n" + response.getBody(), LogLvl.critical);
+                break;
+        }
+    }
     // Class Structure for todo/lists/tasks response
     public class ToDoHWTasks {
         private List<ToDoHW_Task> value;
@@ -93,17 +112,23 @@ public class MsGraph {
         public List<ToDoHW_Task> getValue() {return value;}
     }
     public class ToDoHW_Task {
-        // private String importance;
-        // private String status;
+        private String importance;
+        private String status;
         private String title;
-        // private String createdDateTime;
-        // private String lastModifiedDateTime;
-        // private Boolean hasAttachments;
-        // private String id;
+        private String createdDateTime;
+        private String lastModifiedDateTime;
+        private Boolean hasAttachments;
+        private String id;
         private ToDoHW_dueDateTime dueDateTime;
 
         public String getTitle() {return title;}
+        public String getId() {return id;}
         public ToDoHW_dueDateTime getDueDateTime() {return dueDateTime;}
+
+        /**
+         * @param status Gibt den Status oder den Fortschritt der Aufgabe an. Mögliche Werte: notStarted, inProgress, completed, waitingOnOthers, deferred.
+         */
+        public void setStatus(String status) {this.status = status;}
     }
     public class ToDoHW_dueDateTime {
         private String dateTime;

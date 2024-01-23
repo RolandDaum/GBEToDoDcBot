@@ -6,14 +6,14 @@
   },
   "ReqCredentials": {
     "scopes": [
-      "",
-      ""
+      "Tasks.ReadWrite",
+      "offline_access"
     ],
     "client_id": "",
     "redirect_URI": "",
-    "url_auth": "",
-    "url_token": "",
-    "url_graph": "",
+    "url_auth": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+    "url_token": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+    "url_graph": "https://graph.microsoft.com/v1.0/me/",
     "ToDoListID": ""
   }
 }

@@ -2,48 +2,25 @@ package com.gbetododc.DiscordBot.Notification;
 
 import java.time.Duration;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
+import com.gbetododc.System.Logger;
+import com.gbetododc.System.Logger.LogLvl;
 
 public class ThreadHWNotification extends Thread {
-    private static List<LocalTime> PeriodStartTimes = new ArrayList<>(
-        Arrays.asList(
-            LocalTime.of(7, 40),
-            LocalTime.of(8,30),
-            LocalTime.of(9,35),
-            LocalTime.of(10,25),
-            LocalTime.of(11,25),
-            LocalTime.of(12,15),
-            LocalTime.of(13,5),
-            LocalTime.of(13,50),
-            LocalTime.of(14,35),
-            LocalTime.of(15,25),
-            LocalTime.of(16,10)
-            // Time.valueOf("07:40:00"),
-            // Time.valueOf("08:30:00"),
-            // Time.valueOf("09:35:00"),
-            // Time.valueOf("10:25:00"),
-            // Time.valueOf("11:25:00"),
-            // Time.valueOf("12:15:00"),
-            // Time.valueOf("13:05:00"),
-            // Time.valueOf("13:50:00"),
-            // Time.valueOf("14:35:00"),
-            // Time.valueOf("15:25:00"),
-            // Time.valueOf("16:20:00")
-        )
-    );
+
     public static void main(String[] args) {
         new ThreadHWNotification().start();
     }
     @Override
-    public void run() {     
+    public void run() {   
+        Logger.log("ThreadHWNotification - Thread", "Notification Thread is up and running", LogLvl.Title);
+  
         while (true) {
 
             LocalTime currentTime = LocalTime.now();
             LocalTime wakeUpTime = getNextNotificationTime(currentTime);
 
-            System.out.println("Thread woke up and will sleep until: " + wakeUpTime);
+            Logger.log("ThreadHWNotification - Thread", "Notification Thread will sleep until: " + wakeUpTime, LogLvl.normale);
 
             Duration timetosleep = Duration.ofDays(0);
             if (currentTime.isBefore(wakeUpTime)) {
@@ -64,12 +41,12 @@ public class ThreadHWNotification extends Thread {
     }
     private static LocalTime getNextNotificationTime(LocalTime currentTime) {
         Boolean isAfter;
-        for (LocalTime localTime : PeriodStartTimes) {
+        for (LocalTime localTime : HomeworkNotification.PeriodStartTimes) {
             isAfter = currentTime.isAfter(localTime);
             if (!isAfter) {
                 return localTime;
             }
         }
-        return PeriodStartTimes.getFirst();
+        return HomeworkNotification.PeriodStartTimes.getFirst();
     }
 }

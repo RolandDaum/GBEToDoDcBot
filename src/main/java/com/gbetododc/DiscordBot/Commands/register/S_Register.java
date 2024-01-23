@@ -37,7 +37,7 @@ public class S_Register {
                             amountofCoursestoAdd.decrementAndGet();
                             if (amountofCoursestoAdd.get() == 0) {
                                 Logger.log("S_Register - addCourse", "finished creating/adding all roles to '" + eventUser.getName()+ "'", LogLvl.Title);
-                                eventChannel.sendMessage(":white_check_mark:   " + eventUser.getAsMention() + " assined all roles to you").queue();
+                                eventChannel.sendMessage(":white_check_mark:   " + eventUser.getAsMention() + " assigned all roles to you").queue();
                             }
                         }
                     );

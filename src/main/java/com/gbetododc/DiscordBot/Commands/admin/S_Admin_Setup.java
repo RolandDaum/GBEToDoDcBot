@@ -1,6 +1,11 @@
 package com.gbetododc.DiscordBot.Commands.admin;
 
+import java.time.LocalTime;
+import java.util.List;
+
 import com.gbetododc.DiscordBot.DiscordBot;
+import com.gbetododc.DiscordBot.Notification.HomeworkNotification;
+import com.gbetododc.DiscordBot.Notification.ThreadHWNotification;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -13,6 +18,9 @@ public class S_Admin_Setup {
     static Dotenv dotenv = Dotenv.configure().load();
 
     public static void setup() {
+        // Var to be used in the command setup
+        List<LocalTime> pst = HomeworkNotification.PeriodStartTimes;
+
         DiscordBot.MAIINSERVERGUILD.upsertCommand("admin", "admin settings")
             .addSubcommandGroups(
                 new SubcommandGroupData("roles", "manage roles")
@@ -64,7 +72,23 @@ public class S_Admin_Setup {
                         new SubcommandData("reauthorize", "ommand for reauthentication")
                             .addOption(OptionType.STRING, "authcode", "enter authcode"),
                         new SubcommandData("refreshtoken", "refresh auth cred via the RFToken"),
-                        new SubcommandData("refreshtodo", "refresh the todo list")
+                        new SubcommandData("refreshtodo", "refresh the todo list"),
+                        new SubcommandData("ctimehwnot", "notifie a course of their homework at a specified time")
+                            // .addOption(OptionType.ROLE, "courserole", "the course role to be notified", true)
+                            .addOptions(
+                                new OptionData(OptionType.STRING, "notificationtime", "Choose at which period time should be notified", true)
+                                    .addChoice(pst.get(0).toString(), pst.get(0).toString())
+                                    .addChoice(pst.get(1).toString(), pst.get(1).toString())
+                                    .addChoice(pst.get(2).toString(), pst.get(2).toString())
+                                    .addChoice(pst.get(3).toString(), pst.get(3).toString())
+                                    .addChoice(pst.get(4).toString(), pst.get(4).toString())
+                                    .addChoice(pst.get(5).toString(), pst.get(5).toString())
+                                    .addChoice(pst.get(6).toString(), pst.get(6).toString())
+                                    .addChoice(pst.get(7).toString(), pst.get(7).toString())
+                                    .addChoice(pst.get(8).toString(), pst.get(8).toString())
+                                    .addChoice(pst.get(9).toString(), pst.get(9).toString())
+                                    .addChoice(pst.get(10).toString(), pst.get(10).toString())
+                            )     
                     )
             )
             .queue(

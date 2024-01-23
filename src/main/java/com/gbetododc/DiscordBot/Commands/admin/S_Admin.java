@@ -1,10 +1,12 @@
 package com.gbetododc.DiscordBot.Commands.admin;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import com.gbetododc.DiscordBot.DiscordBot;
 import com.gbetododc.DiscordBot.Commands.register.S_Register_Setup;
+import com.gbetododc.DiscordBot.Notification.HomeworkNotification;
 import com.gbetododc.MSAuthGraph.MsAuth;
 import com.gbetododc.MSAuthGraph.MsGraph;
 import com.gbetododc.System.CJson;
@@ -67,6 +69,9 @@ public class S_Admin {
                         break;
                     case "refreshtodo":
                         msapi_refreshtodo(event);
+                        break;
+                    case "ctimehwnot":
+                        msapi_ctimehwnot(event);
                         break;
                 }
                 break;
@@ -450,5 +455,9 @@ public class S_Admin {
             }
         });
         event.reply("queued").queue();
+    }
+    private static void msapi_ctimehwnot(SlashCommandInteractionEvent event) {
+        event.reply("Starting Notification, but can't verify anything").queue();
+        HomeworkNotification.Notifie(LocalTime.parse(event.getOption("notificationtime").getAsString()));
     }
 }
