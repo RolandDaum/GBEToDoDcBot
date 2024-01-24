@@ -4,7 +4,6 @@ import com.gbetododc.DiscordBot.Commands.BotCommand;
 import com.gbetododc.DiscordBot.Notification.ThreadHWNotification;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
-
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -19,7 +18,6 @@ public class DiscordBot extends ListenerAdapter {
     static Dotenv dotenv = Dotenv.configure().load();
     public static Guild MAIINSERVERGUILD;
     public static JDA JDA;
-    public static String PROJPATH = System.getProperty("user.dir");
 
     public static void main(String[] args) throws InterruptedException {
         Logger.log("DiscordBot - starting", "Starting the bot", LogLvl.Title);

@@ -4,9 +4,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.Map;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import com.gbetododc.DiscordBot.DiscordBot;
 import com.gbetododc.System.Logger.LogLvl;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -18,7 +18,7 @@ public class CJson {
     static Dotenv dotenv = Dotenv.configure().load();
     static String GUILDID = dotenv.get("GUILDID");
     
-    static String jsonFilePath = DiscordBot.PROJPATH + "\\src\\main\\java\\com\\gbetododc\\DiscordBot\\courses.json";
+    static String jsonFilePath = new File("src/main/java/com/gbetododc/DiscordBot/courses.json").getAbsolutePath();
 
     public static Map<String, Map<String, Long>> getcoursemap() {
         try {

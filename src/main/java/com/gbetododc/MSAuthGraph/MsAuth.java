@@ -22,7 +22,7 @@ public class MsAuth {
         List<String> scopeList = msenvJson.getReqCredentials().getScopes();
         String scopes = "";
         for (String scope : scopeList) {
-            if (scopeList.getLast().equals(scope)) {
+            if (scopeList.get(scopeList.size()-1).equals(scope)) {
                 scopes += scope;
                 break;
             } else {
@@ -129,7 +129,7 @@ public class MsAuth {
         List<String> scopeList = msenvJson.getReqCredentials().getScopes();
         String scopes = "";
         for (String scope : scopeList) {
-            if (scopeList.getLast().equals(scope)) {
+            if (scopeList.get(scopeList.size()-1).equals(scope)) {
                 scopes += scope;
                 break;
             } else {

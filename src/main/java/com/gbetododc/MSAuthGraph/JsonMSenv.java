@@ -1,18 +1,17 @@
 package com.gbetododc.MSAuthGraph;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.function.Consumer;
-
-import com.gbetododc.DiscordBot.DiscordBot;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
 import com.google.gson.Gson;
 
 public class JsonMSenv {
-    static String jsonFilePathString = DiscordBot.PROJPATH + "\\src\\main\\java\\com\\gbetododc\\MSAuthGraph\\MSenv.json";
+    static String jsonFilePathString = new File("src/main/java/com/gbetododc/MSAuthGraph/MSenv.json").getAbsolutePath();
 
     /**
      * Get the MSenv.json as an MSenv Obj

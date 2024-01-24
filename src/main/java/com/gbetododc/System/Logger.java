@@ -61,7 +61,7 @@ public class Logger {
                         .queue();
                     } catch (Throwable e) {}    
                 try {
-                    net.dv8tion.jda.api.entities.Role developerRole = DiscordBot.JDA.getRolesByName("Developer", true).getFirst();
+                    net.dv8tion.jda.api.entities.Role developerRole = DiscordBot.JDA.getRolesByName("Developer", true).get(0);
                     List<Member> developerList = DiscordBot.MAIINSERVERGUILD.getMembersWithRoles(developerRole);
 
                     for (Member member : developerList) {

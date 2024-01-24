@@ -1,16 +1,16 @@
 package com.gbetododc.MSAuthGraph;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import com.gbetododc.DiscordBot.DiscordBot;
 import com.gbetododc.MSAuthGraph.MsGraph.ToDoHWTasks;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
 import com.google.gson.Gson;
 
 public class JsonTodoHW {
-    static String jsonFilePathString = DiscordBot.PROJPATH + "\\src\\main\\java\\com\\gbetododc\\MSAuthGraph\\todoHW.json";
+    static String jsonFilePathString = new File("src/main/java/com/gbetododc/MSAuthGraph/todoHW.json").getAbsolutePath();
     
     public static ToDoHWTasks getToDoHW() {
         try {

@@ -47,6 +47,6 @@ public class ThreadHWNotification extends Thread {
                 return localTime;
             }
         }
-        return HomeworkNotification.PeriodStartTimes.getFirst();
+        return HomeworkNotification.PeriodStartTimes.get(0);
     }
 }

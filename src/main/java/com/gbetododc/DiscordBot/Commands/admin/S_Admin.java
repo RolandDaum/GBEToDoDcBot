@@ -457,6 +457,8 @@ public class S_Admin {
         event.reply("queued").queue();
     }
     private static void msapi_ctimehwnot(SlashCommandInteractionEvent event) {
+        User eventUser = event.getUser();
+        Logger.log("S_Admin - msapi_ctimehwnot", eventUser.getName() + " executed '/admin msapi ctimehwnot'", LogLvl.command);
         event.reply("Starting Notification, but can't verify anything").queue();
         HomeworkNotification.Notifie(LocalTime.parse(event.getOption("notificationtime").getAsString()));
     }

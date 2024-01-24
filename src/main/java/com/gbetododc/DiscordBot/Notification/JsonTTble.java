@@ -1,19 +1,19 @@
 package com.gbetododc.DiscordBot.Notification;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import com.gbetododc.DiscordBot.DiscordBot;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
 public class JsonTTble {
-    static String jsonFilePathString = DiscordBot.PROJPATH + "\\src\\main\\java\\com\\gbetododc\\DiscordBot\\Notification\\TTble.json";
+    static String jsonFilePathString = new File("src/main/java/com/gbetododc/DiscordBot/Notification/TTble.json").getAbsolutePath();
     
     public static TTble getTTble() {
         try {
@@ -42,9 +42,9 @@ public class JsonTTble {
          * @param period Integer from 1-11 [1,2,3,4,5,6,7,8,9,10,11]
          * @return List<String> with the coresponding of the courses from the period of the weekday
          */
-        private List<String> getCourses(Integer weekday, Integer period) {
-            return JsonTTble.getTTble().getTimetable().getWeekday(weekday).getPeriod(period);
-        }
+        // private List<String> getCourses(Integer weekday, Integer period) {
+        //     return JsonTTble.getTTble().getTimetable().getWeekday(weekday).getPeriod(period);
+        // }
     }
     public static class TTble_Timetable {
         private TTble_Day Montag;

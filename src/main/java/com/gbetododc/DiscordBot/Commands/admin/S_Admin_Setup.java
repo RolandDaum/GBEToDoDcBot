@@ -2,10 +2,8 @@ package com.gbetododc.DiscordBot.Commands.admin;
 
 import java.time.LocalTime;
 import java.util.List;
-
 import com.gbetododc.DiscordBot.DiscordBot;
 import com.gbetododc.DiscordBot.Notification.HomeworkNotification;
-import com.gbetododc.DiscordBot.Notification.ThreadHWNotification;
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
 import io.github.cdimascio.dotenv.Dotenv;
