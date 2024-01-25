@@ -53,7 +53,7 @@ public class HomeworkNotification {
                             // Guckt, ob das Fälligkeitsdatum der Aufgabe am Heutigen Tag ist.
                             LocalDateTime taskDueDateTime = LocalDateTime.parse(toDoHW_Task.getDueDateTime().getDateTime());
                             ZoneId taskDueTimeZone = ZoneId.of(toDoHW_Task.getDueDateTime().getTimeZone());
-                            LocalDate DueDate = taskDueDateTime.atZone(taskDueTimeZone).withZoneSameInstant(ZoneId.systemDefault()).toLocalDate();
+                            LocalDate DueDate = taskDueDateTime.atZone(taskDueTimeZone).withZoneSameInstant(ZoneId.of("Europe/Berlin")).toLocalDate();
 
                             if (LocalDate.now(Clock.system(ZoneId.of("Europe/Berlin"))).equals(DueDate)) {
                                 // Gucken, ob die heute fällige Aufgabe im Aktuellen Band liegt
