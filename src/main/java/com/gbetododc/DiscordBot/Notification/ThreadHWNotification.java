@@ -1,7 +1,9 @@
 package com.gbetododc.DiscordBot.Notification;
 
+import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.time.ZoneId;
 
 import com.gbetododc.System.Logger;
 import com.gbetododc.System.Logger.LogLvl;
@@ -17,7 +19,7 @@ public class ThreadHWNotification extends Thread {
   
         while (true) {
 
-            LocalTime currentTime = LocalTime.now();
+            LocalTime currentTime = LocalTime.now(Clock.system(ZoneId.of("Europe/Berlin")));
             LocalTime wakeUpTime = getNextNotificationTime(currentTime);
 
             Logger.log("ThreadHWNotification - Thread", "Notification Thread will sleep until: " + wakeUpTime, LogLvl.normale);

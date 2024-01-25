@@ -1,5 +1,6 @@
 package com.gbetododc.DiscordBot.Notification;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -36,7 +37,7 @@ public class HomeworkNotification {
     );
     public static void Notifie(LocalTime notificationTime) {
         // Checken, ob es Mo-Fr ist
-        Integer weekday = LocalDate.now().getDayOfWeek().getValue();
+        Integer weekday = LocalDate.now(Clock.system(ZoneId.of("Europe/Berlin"))).getDayOfWeek().getValue();
         if (weekday < 6) {
             // Checken, ob es zur Zeit Kurse gibt
             List<String> courses = JsonTTble.getTTble().getTimetable().getWeekday(weekday).getPeriodCpursesByLocalTime(notificationTime);
@@ -54,7 +55,7 @@ public class HomeworkNotification {
                             ZoneId taskDueTimeZone = ZoneId.of(toDoHW_Task.getDueDateTime().getTimeZone());
                             LocalDate DueDate = taskDueDateTime.atZone(taskDueTimeZone).withZoneSameInstant(ZoneId.systemDefault()).toLocalDate();
 
-                            if (LocalDate.now().equals(DueDate)) {
+                            if (LocalDate.now(Clock.system(ZoneId.of("Europe/Berlin"))).equals(DueDate)) {
                                 // Gucken, ob die heute fällige Aufgabe im Aktuellen Band liegt
                                 String taskCourse = getCourseNameFromTitle(toDoHW_Task.getTitle());
                                 if (courses.contains(taskCourse.toString())) {
